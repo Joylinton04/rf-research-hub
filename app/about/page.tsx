@@ -48,7 +48,7 @@ export default function About() {
               <span className="font-label-caps text-label-caps text-secondary mb-3 block font-semibold">
                 LABORATORY OVERVIEW
               </span>
-              <h1 className="font-headline-xl text-headline-xl text-primary mb-6 leading-tight">
+              <h1 className="font-headline-xl sm:text-headline-xl text-headline-lg-mobile text-primary mb-6 leading-tight">
                 Our Mission & Infrastructure
               </h1>
               <p className="font-body-lg text-body-lg text-on-surface-variant mb-8 max-w-2xl">

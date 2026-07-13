@@ -121,7 +121,7 @@ body {
 
 @utility text-headline-lg-mobile {
   font-family: var(--font-sans);
-  font-size: 24px;
+  font-size: 34px;
   font-weight: 600;
   line-height: 32px;
 }
