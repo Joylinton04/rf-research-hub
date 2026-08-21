@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Search, Menu, X, PhoneCall } from 'lucide-react';
+import Image from 'next/image';
 
 export const Navbar = () => {
   const pathname = usePathname();
@@ -12,19 +13,27 @@ export const Navbar = () => {
   const navLinks = [
     { name: 'Home', href: '/' },
     { name: 'About', href: '/about' },
-    { name: 'Publications', href: '/publications' },
+    { name: 'Projects', href: '/projects' },
+    { name: 'Bootcamps', href: '/bootcamps' },
+    { name: 'Tutorials', href: '/tutorials' },
+    { name: 'Links', href: '/links' },
+    { name: 'Gallery', href: '/gallery' },
   ];
-
+//  HOME ABOUT PROJECTS BOOTCAMP TUTORIALS LINKS GALLERY
 
   return (
-    <header className="w-full sticky top-0 z-50 bg-surface border-b border-outline-variant shadow-sm backdrop-blur-md bg-opacity-95">
+    <header className="w-full sticky top-0 z-50 bg-white border-b border-outline-variant shadow-sm backdrop-blur-md bg-opacity-95">
       <div className="flex justify-between items-center h-20 px-6 lg:px-12 max-w-container-max mx-auto">
         {/* Brand Logo */}
-        <Link 
-          href="/" 
-          className="text-headline-md font-bold text-primary tracking-tight font-sans hover:opacity-90 transition-opacity"
+        <Link
+          href="/"
+          className="flex items-center gap-4 font-bold text-primary tracking-tight font-sans hover:opacity-90 transition-opacity"
         >
-          RF & TELECOM LAB
+          <Image src="/argg.png" alt="ARGG Logo" width={60} height={60} priority/>
+          <div className="flex flex-col">
+            <span className='text-headline-md'>ARGG</span>
+            <span className='text-headline-sm'>Amateur Radio Group Ghana</span>
+          </div>
         </Link>
 
         {/* Desktop Navigation Links */}
@@ -35,11 +44,10 @@ export const Navbar = () => {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`font-label-caps text-label-caps transition-all duration-200 pb-1 ${
-                  isActive
+                className={`font-label-caps text-label-caps transition-all duration-200 pb-1 ${isActive
                     ? 'text-primary border-b-2 border-primary font-semibold'
                     : 'text-on-surface-variant hover:text-primary'
-                }`}
+                  }`}
               >
                 {link.name}
               </Link>
@@ -49,14 +57,6 @@ export const Navbar = () => {
 
         {/* Trailing Action & Search */}
         <div className="hidden md:flex items-center gap-6">
-          <div className="hidden lg:flex items-center bg-surface-container-low border border-outline-variant rounded px-3 py-1.5 focus-within:border-secondary transition-colors">
-            <Search className="text-outline w-5 h-5 mr-2" />
-            <input
-              type="text"
-              placeholder="Search research..."
-              className="bg-transparent border-none outline-none focus:ring-0 text-body-sm font-body-sm w-48 text-on-surface placeholder-outline"
-            />
-          </div>
           <button className="bg-primary text-on-primary px-6 py-2.5 font-label-caps text-label-caps rounded-sm hover:bg-opacity-90 active:scale-95 transition-all flex items-center gap-2">
             <PhoneCall className="w-4 h-4" />
             Contact Us
@@ -89,9 +89,8 @@ export const Navbar = () => {
                   key={link.href}
                   href={link.href}
                   onClick={() => setIsOpen(false)}
-                  className={`font-label-caps text-label-caps py-2 border-b border-outline-variant/30 ${
-                    isActive ? 'text-primary font-bold' : 'text-on-surface-variant'
-                  }`}
+                  className={`font-label-caps text-label-caps py-2 border-b border-outline-variant/30 ${isActive ? 'text-primary font-bold' : 'text-on-surface-variant'
+                    }`}
                 >
                   {link.name}
                 </Link>

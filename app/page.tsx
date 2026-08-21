@@ -7,6 +7,13 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ProjectCard } from "@/components/ProjectCard";
 import { MediaCard } from "@/components/MediaCard";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+
 
 export default function Home() {
   const [activeFilter, setActiveFilter] = useState("ALL");
@@ -90,6 +97,64 @@ export default function Home() {
 
   const filters = ["ALL", "ANTENNAS", "5G/6G", "PCB DESIGN"];
 
+  const faqs = [
+    {
+      question: "What is ARGG?",
+      answer:
+        "Amateur Radio Group Ghana (ARGG) is an active community and research group dedicated to advancing wireless engineering, amateur radio communications, and high-frequency experimentation in Ghana and across Africa.",
+    },
+    {
+      question: "Who can join Amateur Radio Ghana Group?",
+      answer:
+        "Anyone with an interest in radio communications, telecommunications engineering, electronics, satellite tracking, or emergency communication networks is welcome to join, regardless of experience level.",
+    },
+    {
+      question: "Do I need a license to use amateur radio?",
+      answer:
+        "You can listen, learn, and participate in club activities without a license. However, transmitting on designated amateur radio frequency bands requires an official operator license issued by the National Communications Authority (NCA).",
+    },
+    {
+      question: "Why do I need a License?",
+      answer:
+        "Amateur radio operators transmit on allocated RF frequency bands. Licensing ensures safe operation, prevents harmful interference with commercial and emergency frequencies, and assigns you an internationally recognized unique callsign.",
+    },
+    {
+      question: "How can I get an amateur radio license in Ghana?",
+      answer:
+        "ARGG hosts training bootcamps and study groups to prepare candidates for the National Communications Authority (NCA) amateur radio examination. Upon passing, the NCA issues your official license and callsign.",
+    },
+    {
+      question: "Is amateur radio still relevant today?",
+      answer:
+        "Yes! Amateur radio drives innovation in modern wireless systems (like 5G/6G mesh networks, SDR, satellite communications), provides resilient off-grid emergency communications during disasters, and serves as an invaluable hands-on learning platform for RF engineering.",
+    },
+    {
+      question: "What equipment do I need to get started?",
+      answer:
+        "To start, an inexpensive handheld transceiver (Baofeng or similar), a software-defined radio (SDR) dongle connected to a computer, or even web-based WebSDR receivers are great ways to explore without a large investment.",
+    },
+    {
+      question: "Can students join the group?",
+      answer:
+        "Yes, absolutely! We actively encourage students in engineering, computer science, physics, and hobbyists of all academic backgrounds to join our workshops, research tracks, and practical build sessions.",
+    },
+    {
+      question: "Do I need prior technical experience?",
+      answer:
+        "No prior experience is necessary. Our community offers mentorship, tutorials, step-by-step workshops, and collaborative projects covering fundamentals from basic electronics to advanced antenna design.",
+    },
+    {
+      question: "Can I communicate with people in other countries?",
+      answer:
+        "Yes! High-Frequency (HF) radio signals can bounce off the ionosphere, allowing you to establish voice, Morse code (CW), and digital communications (FT8, JS8Call) with operators across the globe, as well as bounce signals off satellites and the International Space Station (ISS).",
+    },
+    {
+      question: "How do I become a member?",
+      answer:
+        "You can become a member by contacting us through our online registration form, attending one of our regular meetups, or joining our active community channels.",
+    },
+  ];
+
   const filteredMediaItems =
     activeFilter === "ALL"
       ? mediaItems
@@ -100,6 +165,7 @@ export default function Home() {
       <Navbar />
 
       <main className="flex-grow">
+
         {/* Hero Section */}
         <section className="relative hero-pattern py-16 lg:py-24 px-6 lg:px-12 overflow-hidden border-b border-outline-variant">
           <div className="max-w-container-max mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center min-h-[550px]">
@@ -108,12 +174,11 @@ export default function Home() {
                 PHASE 2 DEPLOYMENT ACTIVE
               </div>
               <h1 className="font-headline-xl sm:text-headline-xl text-headline-lg text-primary leading-tight">
-                Advancing RF and Wireless Communication Engineering
+                What is Amateur Radio?
               </h1>
               <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
-                Pioneering the next generation of connectivity through rigorous
-                academic research and hardware innovation. Our lab specializes
-                in ultra-reliable, low-latency communication infrastructures.
+                Amateur Radio, often called Ham Radio, is a worldwide community of licensed hobbyists who use radio technology for non-commercial communication, experimentation, and public service.
+                <br />
               </p>
               <div className="flex flex-wrap gap-4 pt-4">
                 <Link
@@ -212,6 +277,32 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Section 2: FAQs */}
+        <section className="py-16 lg:py-24 px-6 lg:px-12 bg-surface border-b border-outline-variant">
+          <div className="max-w-container-max mx-auto">
+            <div className="flex flex-col md:flex-row justify-between items-baseline mb-8 border-b border-outline-variant pb-4">
+              <div>
+                <h2 className="font-headline-lg text-headline-lg text-primary">
+                  FAQs
+                </h2>
+                <p className="font-body-md text-body-md text-on-surface-variant mt-1">
+                  Frequently asked questions about amateur radio and our group.
+                </p>
+              </div>
+            </div>
+
+            <Accordion type="single" collapsible className="w-full space-y-3">
+              {faqs.map((faq, index) => (
+                <AccordionItem key={index} value={`item-${index}`}>
+                  <AccordionTrigger>{faq.question}</AccordionTrigger>
+                  <AccordionContent>{faq.answer}</AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </div>
+        </section>
+
+
         {/* Key Projects Section */}
         <section className="py-16 lg:py-24 px-6 lg:px-12 bg-surface">
           <div className="max-w-container-max mx-auto">
@@ -265,11 +356,10 @@ export default function Home() {
                     <button
                       key={filter}
                       onClick={() => setActiveFilter(filter)}
-                      className={`px-4 py-1.5 font-label-caps text-label-caps rounded-full cursor-pointer transition-all ${
-                        activeFilter === filter
+                      className={`px-4 py-1.5 font-label-caps text-label-caps rounded-full cursor-pointer transition-all ${activeFilter === filter
                           ? "bg-primary text-on-primary font-semibold border border-primary"
                           : "text-on-surface-variant hover:bg-surface-container"
-                      }`}
+                        }`}
                     >
                       {filter}
                     </button>
