@@ -2,7 +2,7 @@
 
 @theme {
   /* Font Families */
-  --font-sans: var(--font-space-grotesk), sans-serif;
+  --font-sans: var(--font-manrope), sans-serif;
   --font-mono: var(--font-jetbrains-mono), monospace;
 
   /* Spacing */
@@ -191,11 +191,19 @@ body {
   text-transform: uppercase;
 }
 
+@utility font-label-caps {
+  font-family: var(--font-mono);
+}
+
 @utility text-code-md {
   font-family: var(--font-mono);
   font-size: 14px;
   font-weight: 400;
   line-height: 20px;
+}
+
+@utility font-code-md {
+  font-family: var(--font-mono);
 }
 
 /* Technical grid backgrounds and layout styling from design */

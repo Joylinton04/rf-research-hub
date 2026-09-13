@@ -98,23 +98,24 @@ The following core colors represent the primary identity of the RF Research Hub:
 
 ## Typography Specs
 
-The typography strategy focuses on **Inter** for standard UI and long-form research content, and **JetBrains Mono** for technical labels, coordinates, and data values.
+The typography strategy focuses on **Manrope** for headers and body content, and **JetBrains Mono** for tags, technical labels, coordinates, and data values.
 
 ### Font Families
-- **Sans-serif (Headlines & Body):** `Inter`
-- **Monospace (Labels, Codes & Tech Data):** `JetBrains Mono`
+- **Sans-serif (Headlines & Body):** `Manrope`
+- **Monospace (Tags, Labels, Codes & Tech Data):** `JetBrains Mono`
 
 ### Type Hierarchy & Scales
 
 | Token / Style | Font Family | Size | Weight | Line Height | Letter Spacing | Description |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| `headline-xl` | Inter | 48px | Bold (700) | 56px | `-0.02em` | Main page titles, large callouts |
-| `headline-lg` | Inter | 32px | Semi-Bold (600) | 40px | `-0.01em` | Section headers |
-| `headline-lg-mobile` | Inter | 24px | Semi-Bold (600) | 32px | - | Mobile responsive layout headers |
-| `headline-md` | Inter | 24px | Semi-Bold (600) | 32px | - | Subsection headers, card titles |
-| `body-lg` | Inter | 18px | Regular (400) | 28px | - | Lead paragraphs |
-| `body-md` | Inter | 16px | Regular (400) | 24px | - | Primary reading/body content |
-| `body-sm` | Inter | 14px | Regular (400) | 20px | - | Secondary descriptions, captions |
-| `label-caps` | JetBrains Mono | 12px | Semi-Bold (600) | 16px | `0.05em` | Monospaced capitalized labels (uppercase) |
+| `headline-xl` | Manrope | 48px | Bold (700) | 56px | `-0.02em` | Main page titles, large callouts |
+| `headline-lg` | Manrope | 32px | Semi-Bold (600) | 40px | `-0.01em` | Section headers |
+| `headline-lg-mobile` | Manrope | 24px | Semi-Bold (600) | 32px | - | Mobile responsive layout headers |
+| `headline-md` | Manrope | 24px | Semi-Bold (600) | 32px | - | Subsection headers, card titles |
+| `body-lg` | Manrope | 18px | Regular (400) | 28px | - | Lead paragraphs |
+| `body-md` | Manrope | 16px | Regular (400) | 24px | - | Primary reading/body content |
+| `body-sm` | Manrope | 14px | Regular (400) | 20px | - | Secondary descriptions, captions |
+| `label-caps` | JetBrains Mono | 12px | Semi-Bold (600) | 16px | `0.05em` | Monospaced capitalized labels & tags (uppercase) |
 | `code-md` | JetBrains Mono | 14px | Regular (400) | 20px | - | Code snippets, technical readouts |
+
 
