@@ -30,9 +30,9 @@ export const Navbar = () => {
           className="flex items-center gap-4 font-bold text-primary tracking-tight font-sans hover:opacity-90 transition-opacity"
         >
           <Image src="/argg.png" alt="ARGG Logo" width={60} height={60} priority/>
-          <div className="flex flex-col hidden sm:block">
-            <span className='text-headline-md'>ARGG</span>
-            <span className='text-headline-sm'>Amateur Radio Group Ghana</span>
+          <div className="flex flex-col">
+            <span className='text-headline-md block sm:hidden'>ARGG</span>
+            <span className='text-headline-sm hidden sm:block'>Amateur Radio Group Ghana</span>
           </div>
         </Link>
 
