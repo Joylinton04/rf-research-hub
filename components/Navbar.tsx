@@ -32,7 +32,7 @@ export const Navbar = () => {
           <Image src="/argg.png" alt="ARGG Logo" width={60} height={60} priority/>
           <div className="flex flex-col">
             <span className='text-headline-md block sm:hidden'>ARGG</span>
-            <span className='text-headline-sm hidden sm:block'>Amateur Radio Group Ghana</span>
+            <span className='text-headline-sm hidden sm:block'>ARGG</span>
           </div>
         </Link>
 
