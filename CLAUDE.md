@@ -44,3 +44,8 @@ Spacing/layout tokens: `max-w-container-max` (1280px) plus `px-6 lg:px-12` is th
 ## Known gaps
 
 `Navbar`'s `navLinks` point at `/projects`, `/bootcamps`, `/tutorials`, `/gallery`, none of which exist yet (they hit `app/not-found.tsx`). Conversely `app/publications/page.tsx` exists but is not linked from the nav. Root layout `metadata` still carries the create-next-app defaults.
+
+
+## Design Principles
+
+use shadcn components for consistency if applicable otherwise use Tailwind CSS directly.

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Cpu, Layers, Activity, Radio } from 'lucide-react';
+import { Radio } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { TeamCard } from '@/components/TeamCard';
@@ -41,61 +41,31 @@ export default function About() {
       <Navbar />
 
       <main className="min-h-screen">
-        {/* Section 1: Mission & Infrastructure */}
-        <section className="relative py-16 lg:py-24 border-b border-outline-variant hero-pattern technical-grid">
-          <div className="max-w-container-max mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center min-h-[550px] px-6 lg:px-12">
-            <div className="lg:col-span-7">
-              <span className="font-label-caps text-label-caps text-secondary mb-3 block font-semibold">
-                LABORATORY OVERVIEW
-              </span>
-              <h1 className="font-headline-xl sm:text-headline-xl text-headline-lg-mobile text-primary mb-6 leading-tight">
+        {/* Hero Banner with Dark Ambient Lab Background */}
+        <section className="relative bg-black text-white overflow-hidden min-h-[360px] lg:min-h-[420px] flex items-center">
+          {/* Background lab photo positioned on right and faded seamlessly into black */}
+          <div className="absolute inset-0 z-0 flex justify-end">
+            <div className="relative w-full lg:w-3/5 h-full">
+              <img
+                src="/rf-lab.jpg"
+                alt="Research Laboratory"
+                className="w-full h-full object-cover object-center brightness-90 contrast-105"
+              />
+              {/* Multi-layer gradient overlays for smooth dark blending */}
+              <div className="absolute inset-0 bg-gradient-to-r from-black via-black/55 lg:via-black/30 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20"></div>
+            </div>
+          </div>
+
+          {/* Hero Content */}
+          <div className="relative z-10 max-w-container-max mx-auto px-6 lg:px-12 py-16 w-full">
+            <div className="max-w-2xl">
+              <h1 className="text-4xl sm:text-5xl lg:text-[54px] font-extrabold tracking-tight text-white mb-5 leading-tight font-sans">
                 Our Mission & Infrastructure
               </h1>
-              <p className="font-body-lg text-body-lg text-on-surface-variant mb-8 max-w-2xl">
+              <p className="text-base sm:text-xl text-slate-300 leading-relaxed font-medium">
                 Our laboratory is dedicated to bridging the gap between theoretical electromagnetics and practical telecommunications hardware. We provide state-of-the-art facilities for RF characterization, antenna testing, and signal processing research.
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="border border-outline-variant bg-white p-6 rounded-sm shadow-sm hover:border-secondary transition-colors">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Cpu className="text-secondary w-5 h-5" />
-                    <h3 className="font-label-caps text-label-caps text-primary font-bold">
-                      PRECISION TESTING
-                    </h3>
-                  </div>
-                  <p className="font-body-sm text-body-sm text-on-surface-variant">
-                    Anechoic chambers and VNA systems up to 110GHz for high-fidelity component validation.
-                  </p>
-                </div>
-                <div className="border border-outline-variant bg-white p-6 rounded-sm shadow-sm hover:border-secondary transition-colors">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Layers className="text-secondary w-5 h-5" />
-                    <h3 className="font-label-caps text-label-caps text-primary font-bold">
-                      HARDWARE SYNTHESIS
-                    </h3>
-                  </div>
-                  <p className="font-body-sm text-body-sm text-on-surface-variant">
-                    Dedicated clean-room access for MMIC packaging and low-loss substrate fabrication.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="lg:col-span-5 relative">
-              <div className="aspect-square bg-surface-container-high rounded-lg overflow-hidden border border-outline-variant shadow-md">
-                <img
-                  className="w-full h-full object-cover"
-                  src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1200&q=80"
-                  alt="An automated antenna testing range inside an anechoic chamber"
-                />
-              </div>
-              {/* Floating Signal Pips Overlay */}
-              <div className="absolute -bottom-4 -left-4 bg-primary p-4 rounded-sm shadow-xl hidden md:block border border-outline">
-                <div className="flex items-center gap-3">
-                  <span className="w-2.5 h-2.5 rounded-full bg-secondary animate-pulse block"></span>
-                  <span className="font-code-md text-code-md text-on-primary font-semibold">
-                    SYSTEM_STATUS: OPTIMAL
-                  </span>
-                </div>
-              </div>
             </div>
           </div>
         </section>

@@ -89,15 +89,32 @@ export default function LinksPage() {
       <Navbar />
 
       <main className="min-h-screen bg-surface flex flex-col">
-        {/* Hero Section with Technical Grid */}
-        <section className="relative border-b border-outline-variant hero-pattern technical-grid py-12 lg:py-16 px-6 lg:px-12 bg-white/70">
-          <div className="max-w-container-max mx-auto">
-            <h1 className="font-headline-xl text-3xl sm:text-4xl lg:text-headline-xl text-primary font-bold tracking-tight mb-3">
-              Official Links & Research Media
-            </h1>
-            <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
-              Connect directly with our lab initiatives, official university research groups, real-time broadcasts, and affiliated social channels.
-            </p>
+        {/* Hero Banner with Dark Ambient Lab Background */}
+        <section className="relative bg-black text-white overflow-hidden min-h-[360px] lg:min-h-[420px] flex items-center">
+          {/* Background photo positioned on right and faded seamlessly into black */}
+          <div className="absolute inset-0 z-0 flex justify-end">
+            <div className="relative w-full lg:w-3/5 h-full">
+              <img
+                src="/gallery-1.jpeg"
+                alt="ARGG Links and Research Media"
+                className="w-full h-full object-cover object-center brightness-90 contrast-105"
+              />
+              {/* Multi-layer gradient overlays for smooth dark blending */}
+              <div className="absolute inset-0 bg-gradient-to-r from-black via-black/55 lg:via-black/30 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20"></div>
+            </div>
+          </div>
+
+          {/* Hero Content */}
+          <div className="relative z-10 max-w-container-max mx-auto px-6 lg:px-12 py-16 w-full">
+            <div className="max-w-2xl">
+              <h1 className="text-4xl sm:text-5xl lg:text-[54px] font-extrabold tracking-tight text-white mb-5 leading-tight font-sans">
+                Official Links & Research Media
+              </h1>
+              <p className="text-base sm:text-xl text-slate-300 leading-relaxed font-medium">
+                Connect directly with our lab initiatives, official university research groups, real-time broadcasts, and affiliated social channels.
+              </p>
+            </div>
           </div>
         </section>
 

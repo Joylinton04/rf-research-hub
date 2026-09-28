@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 
 interface ProjectCardProps {
   title: string;
@@ -18,7 +19,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   status,
 }) => {
   return (
-    <div className="group bg-surface-container-lowest border border-outline-variant p-6 flex flex-col hover:border-primary transition-all duration-300 shadow-sm hover:shadow-md">
+    <Link href={`projects/${title.replace(/\s+/g, "-")}`} className="group bg-surface-container-lowest border border-outline-variant p-6 flex flex-col hover:border-primary transition-all duration-300 shadow-sm hover:shadow-md">
       <div className="w-full aspect-video mb-6 overflow-hidden bg-surface-container-low border border-outline-variant relative">
         <img
           src={image}
@@ -41,6 +42,6 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         </span>
         <ArrowRight className="w-5 h-5 text-primary group-hover:translate-x-2 transition-transform duration-300" />
       </div>
-    </div>
+    </Link>
   );
 };

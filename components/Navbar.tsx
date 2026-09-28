@@ -14,15 +14,15 @@ export const Navbar = () => {
     { name: 'Home', href: '/' },
     { name: 'About', href: '/about' },
     { name: 'Projects', href: '/projects' },
+    { name: 'Links', href: '/links' },
     { name: 'Bootcamps', href: '/bootcamps' },
     { name: 'Tutorials', href: '/tutorials' },
-    { name: 'Links', href: '/links' },
     { name: 'Gallery', href: '/gallery' },
   ];
 //  HOME ABOUT PROJECTS BOOTCAMP TUTORIALS LINKS GALLERY
 
   return (
-    <header className="w-full sticky top-0 z-50 bg-white border-b border-outline-variant shadow-sm backdrop-blur-md bg-opacity-95">
+    <header className="w-full sticky top-0 z-50 bg-white/75 backdrop-blur-md border-b border-outline-variant/50 shadow-xs supports-[backdrop-filter]:bg-white/70 transition-colors duration-200">
       <div className="flex justify-between items-center h-20 px-6 lg:px-12 max-w-container-max mx-auto">
         {/* Brand Logo */}
         <Link
@@ -44,7 +44,7 @@ export const Navbar = () => {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`font-label-caps text-label-caps transition-all duration-200 pb-1 ${isActive
+                className={`font-sans text-label-caps transition-all duration-200 pb-1 ${isActive
                     ? 'text-primary border-b-2 border-primary font-semibold'
                     : 'text-on-surface-variant hover:text-primary'
                   }`}
@@ -57,7 +57,7 @@ export const Navbar = () => {
 
         {/* Trailing Action & Search */}
         <div className="hidden md:flex items-center gap-6">
-          <button className="bg-primary text-on-primary px-6 py-2.5 font-label-caps text-label-caps rounded-sm hover:bg-opacity-90 active:scale-95 transition-all flex items-center gap-2">
+          <button className="bg-primary text-on-primary px-6 py-2.5 font-label-caps text-label-caps rounded-sm hover:bg-primary-container active:scale-95 transition-all flex items-center gap-2 shadow-xs">
             <PhoneCall className="w-4 h-4" />
             Contact Us
           </button>
@@ -65,12 +65,12 @@ export const Navbar = () => {
 
         {/* Mobile Menu Button */}
         <div className="flex md:hidden items-center gap-4">
-          <button className="bg-primary text-on-primary px-4 py-2 font-label-caps text-label-caps rounded-sm hover:bg-opacity-90 active:scale-95 transition-all text-xs">
+          <button className="bg-primary text-on-primary px-4 py-2 font-label-caps text-label-caps rounded-sm hover:bg-primary-container active:scale-95 transition-all text-xs shadow-xs">
             Contact
           </button>
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="text-on-surface hover:text-primary transition-colors focus:outline-none"
+            className="text-on-surface hover:text-primary transition-colors focus:outline-none p-1.5 rounded-sm hover:bg-black/5"
             aria-label="Toggle menu"
           >
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -80,7 +80,7 @@ export const Navbar = () => {
 
       {/* Mobile Navigation Panel */}
       {isOpen && (
-        <div className="md:hidden bg-surface border-b border-outline-variant py-4 px-6 absolute top-20 left-0 w-full shadow-lg transition-all duration-300">
+        <div className="md:hidden bg-white/90 backdrop-blur-xl border-b border-outline-variant/60 py-4 px-6 absolute top-20 left-0 w-full shadow-lg transition-all duration-300">
           <div className="flex flex-col gap-4">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
@@ -89,14 +89,14 @@ export const Navbar = () => {
                   key={link.href}
                   href={link.href}
                   onClick={() => setIsOpen(false)}
-                  className={`font-label-caps text-label-caps py-2 border-b border-outline-variant/30 ${isActive ? 'text-primary font-bold' : 'text-on-surface-variant'
+                  className={`font-label-caps text-label-caps py-2 border-b border-outline-variant/20 ${isActive ? 'text-primary font-bold' : 'text-on-surface-variant'
                     }`}
                 >
                   {link.name}
                 </Link>
               );
             })}
-            <div className="flex items-center bg-surface-container-low border border-outline-variant rounded px-3 py-2 mt-2">
+            <div className="flex items-center bg-surface-container-low/80 border border-outline-variant/60 rounded px-3 py-2 mt-2">
               <Search className="text-outline w-5 h-5 mr-2" />
               <input
                 type="text"
