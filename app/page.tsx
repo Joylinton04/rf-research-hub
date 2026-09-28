@@ -170,12 +170,14 @@ export default function Home() {
         <section className="relative hero-pattern py-16 lg:py-24 px-6 lg:px-12 overflow-hidden border-b border-outline-variant">
           <div className="max-w-container-max mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center min-h-[550px]">
             <div className="lg:col-span-7 space-y-6 z-10">
-              <div className="inline-block bg-secondary-container text-on-secondary-container font-label-caps text-label-caps px-4 py-1 rounded-full border border-secondary font-semibold">
-                PHASE 2 DEPLOYMENT ACTIVE
+              <div className="inline-block rounded-full border border-secondary bg-secondary-container px-4 py-1 text-label-caps font-semibold text-on-secondary-container">
+                Antenna &amp; RF Research &middot; KNUST
               </div>
+              {/* hero Title */}
               <h1 className="font-headline-xl sm:text-headline-xl text-headline-lg text-primary leading-tight">
                 What is Amateur Radio?
               </h1>
+              {/* hero description */}
               <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
                 Amateur Radio, often called Ham Radio, is a worldwide community of licensed hobbyists who use radio technology for non-commercial communication, experimentation, and public service.
                 <br />
@@ -220,7 +222,7 @@ export default function Home() {
           </div>
         </section>
 
-        
+
 
         {/* Section 2: FAQs */}
         <section className="py-16 lg:py-24 px-6 lg:px-12 bg-surface border-b border-outline-variant">
@@ -302,8 +304,8 @@ export default function Home() {
                       key={filter}
                       onClick={() => setActiveFilter(filter)}
                       className={`px-4 py-1.5 font-label-caps text-label-caps rounded-full cursor-pointer transition-all ${activeFilter === filter
-                          ? "bg-primary text-on-primary font-semibold border border-primary"
-                          : "text-on-surface-variant hover:bg-surface-container"
+                        ? "bg-primary text-on-primary font-semibold border border-primary"
+                        : "text-on-surface-variant hover:bg-surface-container"
                         }`}
                     >
                       {filter}
