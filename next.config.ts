@@ -1,3 +1,4 @@
+import { withPayload } from "@payloadcms/next/withPayload";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
@@ -5,4 +6,4 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: ["192.168.8.179:3000","10.132.93.221"] 
 };
 
-export default nextConfig;
+export default withPayload(nextConfig);

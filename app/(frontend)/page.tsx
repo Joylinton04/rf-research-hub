@@ -1,12 +1,12 @@
-"use client";
-
-import React, { useState } from "react";
+import React from "react";
+import { getPayload } from "payload";
+import config from "@payload-config";
 import Link from "next/link";
-import { ArrowRight, ArrowUpDown, Radio } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ProjectCard } from "@/components/ProjectCard";
-import { MediaCard } from "@/components/MediaCard";
+import { MediaGallery } from "@/components/MediaGallery";
 import {
   Accordion,
   AccordionContent,
@@ -15,8 +15,11 @@ import {
 } from "@/components/ui/accordion";
 
 
-export default function Home() {
-  const [activeFilter, setActiveFilter] = useState("ALL");
+export default async function Home() {
+  // Editable in the admin panel at /admin → Globals → Home Hero.
+  const payload = await getPayload({ config });
+  const hero = await payload.findGlobal({ slug: "home-hero" });
+
 
   const keyProjects = [
     {
@@ -155,11 +158,6 @@ export default function Home() {
     },
   ];
 
-  const filteredMediaItems =
-    activeFilter === "ALL"
-      ? mediaItems
-      : mediaItems.filter((item) => item.filterTag === activeFilter);
-
   return (
     <>
       <Navbar />
@@ -175,12 +173,11 @@ export default function Home() {
               </div>
               {/* hero Title */}
               <h1 className="font-headline-xl sm:text-headline-xl text-headline-lg text-primary leading-tight">
-                What is Amateur Radio?
+                {hero.title}
               </h1>
               {/* hero description */}
-              <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
-                Amateur Radio, often called Ham Radio, is a worldwide community of licensed hobbyists who use radio technology for non-commercial communication, experimentation, and public service.
-                <br />
+              <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl whitespace-pre-line">
+                {hero.description}
               </p>
               <div className="flex flex-wrap gap-4 pt-4">
                 <Link
@@ -284,63 +281,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Research Media Gallery Section (Merged) */}
-        <section className="py-16 lg:py-24 px-6 lg:px-12 bg-surface-container-low border-t border-b border-outline-variant">
-          <div className="max-w-container-max mx-auto">
-            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-12 border-b border-outline-variant pb-4">
-              <div>
-                <h2 className="font-headline-lg text-headline-lg text-primary">
-                  Research Media Gallery
-                </h2>
-                <p className="font-body-md text-body-md text-on-surface-variant mt-1">
-                  Visual documentation of our hardware setups, field tests, and
-                  laboratory research.
-                </p>
-              </div>
-              <div className="flex flex-wrap items-center gap-4 w-full lg:w-auto">
-                <div className="flex flex-wrap gap-2">
-                  {filters.map((filter) => (
-                    <button
-                      key={filter}
-                      onClick={() => setActiveFilter(filter)}
-                      className={`px-4 py-1.5 font-label-caps text-label-caps rounded-full cursor-pointer transition-all ${activeFilter === filter
-                        ? "bg-primary text-on-primary font-semibold border border-primary"
-                        : "text-on-surface-variant hover:bg-surface-container"
-                        }`}
-                    >
-                      {filter}
-                    </button>
-                  ))}
-                </div>
-                <div className="hidden sm:flex items-center gap-2 text-outline font-label-caps text-label-caps font-semibold select-none ml-auto lg:ml-0">
-                  <ArrowUpDown className="w-4 h-4 text-outline" />
-                  <span>SORT BY DATE</span>
-                </div>
-              </div>
-            </div>
-
-            {filteredMediaItems.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {filteredMediaItems.map((item, idx) => (
-                  <MediaCard
-                    key={idx}
-                    title={item.title}
-                    category={item.category}
-                    description={item.description}
-                    image={item.image}
-                    date={item.date}
-                  />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-20 border border-dashed border-outline-variant rounded bg-surface-container-lowest">
-                <p className="font-body-md text-on-surface-variant">
-                  No media found for the selected category.
-                </p>
-              </div>
-            )}
-          </div>
-        </section>
+        <MediaGallery items={mediaItems} filters={filters} />
 
         {/* Lab Infrastructure & Telemetry (Merged) */}
         <section className="py-16 lg:py-24 px-6 lg:px-12 bg-surface">
