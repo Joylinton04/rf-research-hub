@@ -17,8 +17,8 @@ export default function ProjectsPage() {
       'Software-Defined Networks for Optical Networks Using Flexible Orchestration: Advances, Challenges, and Opportunities',
     authors:
       'Dr. Eliel Keelson, Dr. Andrew Agbemenu, Prof. Eric Tchao, Kenneth Nsafoa-Yeboah, Bright Yeboah-Akowuah, Benjamin Kommey, Mohammad Monirujjaman Khan',
-    date: 'Aug 2022',
-    year: '2022',
+    date: 'Aug 2026',
+    year: '2026',
     authorKeys: ['keelson', 'agbemenu', 'tchao'],
     abstract:
       'Optical networks offer a wide range of benefits to the telecommunication sector worldwide with their provision of higher bandwidth, which leads to faster data speed, longer transmission distance, and flexible software-defined orchestration...',

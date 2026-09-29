@@ -21,9 +21,11 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   return (
     <Link href={`projects/${title.replace(/\s+/g, "-")}`} className="group bg-surface-container-lowest border border-outline-variant p-6 flex flex-col hover:border-primary transition-all duration-300 shadow-sm hover:shadow-md">
       <div className="w-full aspect-video mb-6 overflow-hidden bg-surface-container-low border border-outline-variant relative">
-        <img
+        <Image
           src={image}
           alt={title}
+          width={1200}
+          height={800}
           className="w-full h-full object-cover opacity-85 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
         />
         <div className="absolute top-3 right-3 bg-primary text-on-primary font-label-caps text-[10px] px-2 py-1 font-semibold tracking-wider">
