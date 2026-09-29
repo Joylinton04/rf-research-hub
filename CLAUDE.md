@@ -48,4 +48,5 @@ Spacing/layout tokens: `max-w-container-max` (1280px) plus `px-6 lg:px-12` is th
 
 ## Design Principles
 
-use shadcn components for consistency if applicable otherwise use Tailwind CSS directly.
+Use shadcn components for consistency if applicable otherwise use Tailwind CSS directly.
+Use SEO semantic tags when appropriate

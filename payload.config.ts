@@ -6,6 +6,8 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical';
 import { buildConfig } from 'payload';
 import sharp from 'sharp';
 
+import { Faqs } from './collections/Faqs';
+import { Projects } from './collections/Projects';
 import { Users } from './collections/Users';
 import { HomeHero } from './globals/HomeHero';
 
@@ -19,7 +21,7 @@ export default buildConfig({
       titleSuffix: '— ARGG Admin',
     },
   },
-  collections: [Users],
+  collections: [Users, Faqs, Projects],
   globals: [HomeHero],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

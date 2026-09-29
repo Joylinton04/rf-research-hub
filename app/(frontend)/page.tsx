@@ -20,6 +20,15 @@ export default async function Home() {
   const payload = await getPayload({ config });
   const hero = await payload.findGlobal({ slug: "home-hero" });
 
+  // Editable in the admin panel at /admin → Collections → FAQs. The collection
+  // is `orderable`, so `_order` is the editor-controlled running order.
+  const { docs: faqs } = await payload.find({
+    collection: "faqs",
+    sort: "_order",
+    limit: 100,
+    depth: 0,
+  });
+
 
   const keyProjects = [
     {
@@ -100,64 +109,6 @@ export default async function Home() {
 
   const filters = ["ALL", "ANTENNAS", "5G/6G", "PCB DESIGN"];
 
-  const faqs = [
-    {
-      question: "What is ARGG?",
-      answer:
-        "Amateur Radio Group Ghana (ARGG) is an active community and research group dedicated to advancing wireless engineering, amateur radio communications, and high-frequency experimentation in Ghana and across Africa.",
-    },
-    {
-      question: "Who can join Amateur Radio Ghana Group?",
-      answer:
-        "Anyone with an interest in radio communications, telecommunications engineering, electronics, satellite tracking, or emergency communication networks is welcome to join, regardless of experience level.",
-    },
-    {
-      question: "Do I need a license to use amateur radio?",
-      answer:
-        "You can listen, learn, and participate in club activities without a license. However, transmitting on designated amateur radio frequency bands requires an official operator license issued by the National Communications Authority (NCA).",
-    },
-    {
-      question: "Why do I need a License?",
-      answer:
-        "Amateur radio operators transmit on allocated RF frequency bands. Licensing ensures safe operation, prevents harmful interference with commercial and emergency frequencies, and assigns you an internationally recognized unique callsign.",
-    },
-    {
-      question: "How can I get an amateur radio license in Ghana?",
-      answer:
-        "ARGG hosts training bootcamps and study groups to prepare candidates for the National Communications Authority (NCA) amateur radio examination. Upon passing, the NCA issues your official license and callsign.",
-    },
-    {
-      question: "Is amateur radio still relevant today?",
-      answer:
-        "Yes! Amateur radio drives innovation in modern wireless systems (like 5G/6G mesh networks, SDR, satellite communications), provides resilient off-grid emergency communications during disasters, and serves as an invaluable hands-on learning platform for RF engineering.",
-    },
-    {
-      question: "What equipment do I need to get started?",
-      answer:
-        "To start, an inexpensive handheld transceiver (Baofeng or similar), a software-defined radio (SDR) dongle connected to a computer, or even web-based WebSDR receivers are great ways to explore without a large investment.",
-    },
-    {
-      question: "Can students join the group?",
-      answer:
-        "Yes, absolutely! We actively encourage students in engineering, computer science, physics, and hobbyists of all academic backgrounds to join our workshops, research tracks, and practical build sessions.",
-    },
-    {
-      question: "Do I need prior technical experience?",
-      answer:
-        "No prior experience is necessary. Our community offers mentorship, tutorials, step-by-step workshops, and collaborative projects covering fundamentals from basic electronics to advanced antenna design.",
-    },
-    {
-      question: "Can I communicate with people in other countries?",
-      answer:
-        "Yes! High-Frequency (HF) radio signals can bounce off the ionosphere, allowing you to establish voice, Morse code (CW), and digital communications (FT8, JS8Call) with operators across the globe, as well as bounce signals off satellites and the International Space Station (ISS).",
-    },
-    {
-      question: "How do I become a member?",
-      answer:
-        "You can become a member by contacting us through our online registration form, attending one of our regular meetups, or joining our active community channels.",
-    },
-  ];
-
   return (
     <>
       <Navbar />
@@ -236,8 +187,8 @@ export default async function Home() {
             </div>
 
             <Accordion type="single" collapsible className="w-full space-y-3">
-              {faqs.map((faq, index) => (
-                <AccordionItem key={index} value={`item-${index}`}>
+              {faqs.map((faq) => (
+                <AccordionItem key={faq.id} value={`item-${faq.id}`}>
                   <AccordionTrigger>{faq.question}</AccordionTrigger>
                   <AccordionContent>{faq.answer}</AccordionContent>
                 </AccordionItem>
