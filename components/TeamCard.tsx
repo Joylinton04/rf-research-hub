@@ -1,50 +1,80 @@
 import React from 'react';
+import { Mail, Phone } from 'lucide-react';
+import Image from 'next/image';
 
 interface TeamCardProps {
   name: string;
-  role: string;
-  specialties: string[];
+  title: string;
   description: string;
   image: string;
+  tag: string;
+  socials?: {
+    phone?: string | null;
+    email?: string | null;
+  } | null;
 }
 
 export const TeamCard: React.FC<TeamCardProps> = ({
   name,
-  role,
-  specialties,
+  title,
   description,
   image,
+  tag,
+  socials,
 }) => {
+  const phone = socials?.phone?.trim();
+  const email = socials?.email?.trim();
+
   return (
-    <div className="group flex flex-col border border-outline-variant hover:border-primary hover:-translate-y-1 transition-all duration-300 shadow-sm hover:shadow-md">
-      <div className="aspect-square bg-surface-container overflow-hidden">
-        <img
+    <div className="group flex flex-col border border-outline-variant hover:border-primary hover:-translate-y-1 transition-all duration-300 shadow-sm hover:shadow-md mt-6">
+      <div className="aspect-square bg-surface-container overflow-hidden relative">
+        <Image
           src={image}
           alt={name}
-          className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+          fill
+          className="w-full h-full object-cover transition-all duration-500"
         />
       </div>
       <div className="p-6 flex-grow flex flex-col justify-between">
         <div>
           <span className="font-label-caps text-label-caps text-secondary font-semibold">
-            {role}
+            {title}
           </span>
-          <h4 className="font-headline-md text-headline-md text-primary mt-1 mb-3">
+          <h4 className="font-headline-md text-headline-md text-primary mt-1 mb-3 font-bold">
             {name}
           </h4>
           <p className="font-body-sm text-body-sm text-on-surface-variant leading-relaxed mb-4">
             {description}
           </p>
         </div>
-        <div className="flex flex-wrap gap-1.5 pt-2">
-          {specialties.map((spec) => (
-            <span
-              key={spec}
-              className="bg-primary-container text-on-primary-container text-[10px] px-2 py-0.5 font-label-caps font-semibold tracking-wider rounded-sm"
-            >
-              {spec}
+        <div className="space-y-4">
+          {(phone || email) && (
+            <div className="space-y-1.5">
+              {phone && (
+                <a
+                  href={`tel:${phone.replace(/\s+/g, '')}`}
+                  className="flex items-center gap-2 font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors"
+                >
+                  <Phone className="w-3.5 h-3.5 shrink-0" />
+                  <span>{phone}</span>
+                </a>
+              )}
+              {email && (
+                <a
+                  href={`mailto:${email}`}
+                  className="flex items-center gap-2 font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors"
+                >
+                  <Mail className="w-3.5 h-3.5 shrink-0" />
+                  <span className="truncate">{email}</span>
+                </a>
+              )}
+            </div>
+          )}
+          <div className="flex flex-wrap gap-1.5 pt-2">
+            <span className="bg-primary-container text-on-primary-container text-[10px] px-2 py-0.5 font-label-caps font-semibold tracking-wider rounded-sm">
+              {tag}
             </span>
-          ))}
+          </div>
         </div>
       </div>
     </div>

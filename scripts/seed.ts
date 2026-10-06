@@ -1,6 +1,6 @@
 /**
- * Seeds the FAQs and Projects collections with the content that used to be
- * hard-coded in the page components.
+ * Seeds the FAQs, Projects and Researchers collections with the content that
+ * used to be hard-coded in the page components.
  *
  * Run with: npm run seed
  *
@@ -122,6 +122,39 @@ const projects = [
   },
 ];
 
+// Image-to-name pairing confirmed with the maintainer: the portrait filenames,
+// not the order the names were first listed in, are authoritative.
+const researchers = [
+  {
+    image: '/prof-1.jpg',
+    title: 'Professor',
+    name: 'Prof. Sani Mubarak Ellis',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    socials: { phone: '+233 123 123455', email: 'lecture@knust.edu.gh' },
+    tag: 'ANTENNA DESIGN',
+    teamLeader: true,
+  },
+  {
+    image: '/prof-3-oteng.jpg',
+    title: 'Lecturer',
+    name: 'Dr. Kwame Oteng Gyasi',
+    description:
+      'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute irure.',
+    socials: { phone: '+233 123 123455', email: 'lecture@knust.edu.gh' },
+    tag: 'ANTENNA DESIGN',
+  },
+  {
+    image: '/prof-2-sarkodie.jpg',
+    title: 'Lecturer',
+    name: 'Dr. Kingsford Sarkodie Obeng Kwakye',
+    description:
+      'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum sed ut perspiciatis.',
+    socials: { phone: '+233 123 123455', email: 'lecture@knust.edu.gh' },
+    tag: 'ANTENNA DESIGN',
+  },
+];
+
 const seed = async () => {
   const payload = await getPayload({ config });
 
@@ -145,6 +178,18 @@ const seed = async () => {
       await payload.create({ collection: 'projects', data: project });
     }
     payload.logger.info(`projects: seeded ${projects.length} row(s).`);
+  }
+
+  const existingResearchers = await payload.count({ collection: 'researchers' });
+  if (existingResearchers.totalDocs > 0) {
+    payload.logger.info(
+      `researchers: ${existingResearchers.totalDocs} row(s) already present — skipping.`,
+    );
+  } else {
+    for (const researcher of researchers) {
+      await payload.create({ collection: 'researchers', data: researcher });
+    }
+    payload.logger.info(`researchers: seeded ${researchers.length} row(s).`);
   }
 
   await payload.destroy();

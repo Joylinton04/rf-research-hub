@@ -70,6 +70,7 @@ export interface Config {
     users: User;
     faqs: Faq;
     projects: Project;
+    researchers: Researcher;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -80,6 +81,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     faqs: FaqsSelect<false> | FaqsSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
+    researchers: ResearchersSelect<false> | ResearchersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -220,6 +222,55 @@ export interface Project {
   createdAt: string;
 }
 /**
+ * Faculty and researchers shown in the team grid on the About page. Drag rows to reorder them.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "researchers".
+ */
+export interface Researcher {
+  id: number;
+  _order?: string | null;
+  /**
+   * Portrait — a path under /public, e.g. /prof-1.jpg. Rendered as a square through next/image, so a centred head-and-shoulders crop works best. An external URL only works if its host is listed in next.config.ts images.remotePatterns.
+   */
+  image: string;
+  /**
+   * Role or academic title, shown in small caps above the name.
+   */
+  title: string;
+  /**
+   * Full name including any prefix, e.g. "Dr. Kwame Oteng Gyasi".
+   */
+  name: string;
+  /**
+   * Two or three sentences on their research focus. Keep it short — the card clamps long copy.
+   */
+  description: string;
+  /**
+   * Contact details. Each one is omitted from the card when left blank.
+   */
+  socials?: {
+    /**
+     * Rendered as a tel: link.
+     */
+    phone?: string | null;
+    /**
+     * Rendered as a mailto: link.
+     */
+    email?: string | null;
+  };
+  /**
+   * Research area chip at the foot of the card. Displayed in caps.
+   */
+  tag: string;
+  /**
+   * Features this person in a wide card above the grid. Ticking it here unticks whoever held it before.
+   */
+  teamLeader?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -254,6 +305,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'projects';
         value: number | Project;
+      } | null)
+    | ({
+        relationTo: 'researchers';
+        value: number | Researcher;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -343,6 +398,27 @@ export interface ProjectsSelect<T extends boolean = true> {
   date?: T;
   image?: T;
   content?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "researchers_select".
+ */
+export interface ResearchersSelect<T extends boolean = true> {
+  _order?: T;
+  image?: T;
+  title?: T;
+  name?: T;
+  description?: T;
+  socials?:
+    | T
+    | {
+        phone?: T;
+        email?: T;
+      };
+  tag?: T;
+  teamLeader?: T;
   updatedAt?: T;
   createdAt?: T;
 }

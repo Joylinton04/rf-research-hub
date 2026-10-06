@@ -1,40 +1,27 @@
 import React from 'react';
+import { getPayload } from 'payload';
+import config from '@payload-config';
 import { Radio } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { TeamCard } from '@/components/TeamCard';
+import { TeamLeaderCard } from '@/components/TeamLeaderCard';
 
-export default function About() {
-  const teamMembers = [
-    {
-      name: 'Dr. Elena Vance',
-      role: 'Lead Investigator',
-      specialties: ['WAVE_PROP', 'ANTENNA_DESIGN'],
-      description: 'Specializing in high-frequency wave propagation and adaptive beamforming.',
-      image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80',
-    },
-    {
-      name: 'Prof. Marcus Thorne',
-      role: 'Senior Faculty',
-      specialties: ['RFIC', 'MICROWAVE'],
-      description: 'Focused on microwave circuit design and integrated RF front-ends.',
-      image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=600&q=80',
-    },
-    {
-      name: 'Dr. Sarah Chen',
-      role: 'Research Fellow',
-      specialties: ['6G_STANDARDS', 'PROTOCOLS'],
-      description: 'Innovating network layer efficiency for 5G/6G protocol stacks.',
-      image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=600&q=80',
-    },
-    {
-      name: 'Dr. James Wilson',
-      role: 'Lab Director',
-      specialties: ['SYSTEMS_ARCH', 'DIRECTOR'],
-      description: 'Overseeing large-scale RF system architecture and cross-disciplinary projects.',
-      image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=600&q=80',
-    },
-  ];
+export default async function About() {
+  // Editable in the admin panel at /admin → Collections → Researchers. The
+  // collection is `orderable`, so `_order` is the editor-controlled grid order.
+  const payload = await getPayload({ config });
+  const { docs: researchers, totalDocs: facultyCount } = await payload.find({
+    collection: 'researchers',
+    sort: '_order',
+    limit: 100,
+    depth: 0,
+  });
+
+  // Whoever carries the `teamLeader` flag gets the wide card above the grid; the
+  // collection's beforeChange hook keeps that to at most one person.
+  const teamLeader = researchers.find((researcher) => researcher.teamLeader);
+  const teamMembers = researchers.filter((researcher) => researcher !== teamLeader);
 
   return (
     <>
@@ -84,20 +71,51 @@ export default function About() {
                 </p>
               </div>
               <div className="font-label-caps text-label-caps text-outline font-semibold">
-                FACULTY_COUNT: 04
+                FACULTY_COUNT: {String(facultyCount).padStart(2, '0')}
               </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {teamMembers.map((member) => (
-                <TeamCard
-                  key={member.name}
-                  name={member.name}
-                  role={member.role}
-                  specialties={member.specialties}
-                  description={member.description}
-                  image={member.image}
+            <div>
+              <div className="flex flex-col md:flex-row justify-between items-end mb-12 border-b border-outline-variant pb-4">
+                <h2 className="font-headline-lg text-headline-lg text-primary">
+                  Team Leader
+                </h2>
+                <p className="font-body-md text-body-md text-on-surface-variant mt-1">
+                  The intellectual core driving our innovations in telecommunications.
+                </p>
+              </div>
+              {teamLeader && (
+                <TeamLeaderCard
+                  name={teamLeader.name}
+                  title={teamLeader.title}
+                  description={teamLeader.description}
+                  image={teamLeader.image}
+                  tag={teamLeader.tag}
+                  socials={teamLeader.socials}
                 />
-              ))}
+              )}
+            </div>
+            <div>
+              <div className="flex flex-col md:flex-row justify-between items-end mb-12 border-b border-outline-variant pb-4 mt-12">
+                <h2 className="font-headline-lg text-headline-lg text-primary">
+                  Team Members
+                </h2>
+                <p className="font-body-md text-body-md text-on-surface-variant mt-1">
+                  The intellectual core driving our innovations in telecommunications.
+                </p>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {teamMembers.map((member) => (
+                  <TeamCard
+                    key={member.id}
+                    name={member.name}
+                    title={member.title}
+                    description={member.description}
+                    image={member.image}
+                    tag={member.tag}
+                    socials={member.socials}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </section>

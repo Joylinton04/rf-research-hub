@@ -8,6 +8,7 @@ import sharp from 'sharp';
 
 import { Faqs } from './collections/Faqs';
 import { Projects } from './collections/Projects';
+import { Researchers } from './collections/Researchers';
 import { Users } from './collections/Users';
 import { HomeHero } from './globals/HomeHero';
 
@@ -21,7 +22,7 @@ export default buildConfig({
       titleSuffix: '— ARGG Admin',
     },
   },
-  collections: [Users, Faqs, Projects],
+  collections: [Users, Faqs, Projects, Researchers],
   globals: [HomeHero],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
