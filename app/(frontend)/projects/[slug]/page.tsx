@@ -9,6 +9,7 @@ import { ArrowLeft, Calendar, User } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { lexicalToParagraphs } from '@/lib/lexical';
+import { imageSrc } from '@/lib/media';
 
 // Dates are stored as midnight UTC — see the note on the Projects listing page.
 const fullDate = new Intl.DateTimeFormat('en-US', {
@@ -23,7 +24,7 @@ const findProject = async (slug: string) => {
     collection: 'projects',
     where: { slug: { equals: slug } },
     limit: 1,
-    depth: 0,
+    depth: 1,
   });
   return docs[0];
 };
@@ -66,6 +67,8 @@ export default async function ProjectPage({
   const project = await findProject(slug);
   if (!project) notFound();
 
+  const thumbnail = imageSrc(project.thumbnail, project.image, 'feature');
+
   return (
     <>
       <Navbar />
@@ -104,12 +107,14 @@ export default async function ProjectPage({
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
             <div className="lg:col-span-4">
               <div className="border border-outline-variant rounded-lg bg-surface-container-lowest p-3 lg:sticky lg:top-28">
-                {/* eslint-disable-next-line @next/next/no-img-element -- editors may point this at any external URL */}
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-auto object-contain rounded-sm"
-                />
+                {thumbnail && (
+                  /* eslint-disable-next-line @next/next/no-img-element -- intrinsic height on an unknown aspect ratio; next/image needs fixed dimensions */
+                  <img
+                    src={thumbnail}
+                    alt={project.title}
+                    className="w-full h-auto object-contain rounded-sm"
+                  />
+                )}
               </div>
             </div>
 

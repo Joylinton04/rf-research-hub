@@ -6,7 +6,7 @@ interface TeamLeaderCardProps {
   name: string;
   title: string;
   description: string;
-  image: string;
+  image: string | null;
   tag: string;
   socials?: {
     phone?: string | null;
@@ -32,13 +32,15 @@ export const TeamLeaderCard: React.FC<TeamLeaderCardProps> = ({
   return (
     <div className="group grid grid-cols-1 md:grid-cols-12 border border-outline-variant hover:border-primary transition-all duration-300 shadow-sm hover:shadow-md mb-12">
       <div className="md:col-span-5 lg:col-span-4 relative aspect-square md:aspect-auto md:min-h-[520px] bg-surface-container overflow-hidden">
-        <Image
-          src={image}
-          alt={name}
-          fill
-          sizes="(min-width: 1024px) 34vw, (min-width: 768px) 42vw, 100vw"
-          className="w-full h-full object-cover transition-all duration-500"
-        />
+        {image && (
+          <Image
+            src={image}
+            alt={name}
+            fill
+            sizes="(min-width: 1024px) 34vw, (min-width: 768px) 42vw, 100vw"
+            className="w-full h-full object-cover transition-all duration-500"
+          />
+        )}
       </div>
 
       <div className="md:col-span-7 lg:col-span-8 p-6 lg:p-10 flex flex-col justify-center gap-4">

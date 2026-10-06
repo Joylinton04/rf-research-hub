@@ -6,16 +6,19 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { TeamCard } from '@/components/TeamCard';
 import { TeamLeaderCard } from '@/components/TeamLeaderCard';
+import { imageSrc } from '@/lib/media';
 
 export default async function About() {
   // Editable in the admin panel at /admin → Collections → Researchers. The
   // collection is `orderable`, so `_order` is the editor-controlled grid order.
   const payload = await getPayload({ config });
+  // depth 1 so the `portrait` upload arrives as a Media doc with a URL — at
+  // depth 0 Payload returns a bare id and every card would render empty.
   const { docs: researchers, totalDocs: facultyCount } = await payload.find({
     collection: 'researchers',
     sort: '_order',
     limit: 100,
-    depth: 0,
+    depth: 1,
   });
 
   // Whoever carries the `teamLeader` flag gets the wide card above the grid; the
@@ -88,7 +91,7 @@ export default async function About() {
                   name={teamLeader.name}
                   title={teamLeader.title}
                   description={teamLeader.description}
-                  image={teamLeader.image}
+                  image={imageSrc(teamLeader.portrait, teamLeader.image, 'feature')}
                   tag={teamLeader.tag}
                   socials={teamLeader.socials}
                 />
@@ -110,7 +113,7 @@ export default async function About() {
                     name={member.name}
                     title={member.title}
                     description={member.description}
-                    image={member.image}
+                    image={imageSrc(member.portrait, member.image, 'card')}
                     tag={member.tag}
                     socials={member.socials}
                   />

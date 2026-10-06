@@ -71,6 +71,7 @@ export interface Config {
     faqs: Faq;
     projects: Project;
     researchers: Researcher;
+    media: Media;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -82,6 +83,7 @@ export interface Config {
     faqs: FaqsSelect<false> | FaqsSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     researchers: ResearchersSelect<false> | ResearchersSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -197,9 +199,13 @@ export interface Project {
    */
   date: string;
   /**
-   * Card thumbnail — a path under /public (e.g. /research-img.png) or a full https URL.
+   * Card image. Upload a file or pick one already in Media. Shown on the Projects grid and at the top of the write-up.
    */
-  image: string;
+  thumbnail?: (number | null) | Media;
+  /**
+   * Legacy /public path. Replaced by Card image.
+   */
+  image?: string | null;
   /**
    * Body of the project write-up shown on the detail page.
    */
@@ -222,6 +228,61 @@ export interface Project {
   createdAt: string;
 }
 /**
+ * Images used across the site. Upload once here, then pick the file from a Researcher or Project.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: number;
+  /**
+   * Describes the image for screen readers and for when it fails to load. For a portrait, the person’s name is the right answer.
+   */
+  alt: string;
+  /**
+   * Optional photographer or source attribution.
+   */
+  credit?: string | null;
+  _objectKey?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+  sizes?: {
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    card?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    feature?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
+}
+/**
  * Faculty and researchers shown in the team grid on the About page. Drag rows to reorder them.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -231,9 +292,13 @@ export interface Researcher {
   id: number;
   _order?: string | null;
   /**
-   * Portrait — a path under /public, e.g. /prof-1.jpg. Rendered as a square through next/image, so a centred head-and-shoulders crop works best. An external URL only works if its host is listed in next.config.ts images.remotePatterns.
+   * Portrait. Upload a file or pick one already in Media. Rendered as a square, so a head-and-shoulders shot works best — the card centres and crops it.
    */
-  image: string;
+  portrait?: (number | null) | Media;
+  /**
+   * Legacy /public path. Replaced by Portrait.
+   */
+  image?: string | null;
   /**
    * Role or academic title, shown in small caps above the name.
    */
@@ -309,6 +374,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'researchers';
         value: number | Researcher;
+      } | null)
+    | ({
+        relationTo: 'media';
+        value: number | Media;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -396,6 +465,7 @@ export interface ProjectsSelect<T extends boolean = true> {
   slug?: T;
   authors?: T;
   date?: T;
+  thumbnail?: T;
   image?: T;
   content?: T;
   updatedAt?: T;
@@ -407,6 +477,7 @@ export interface ProjectsSelect<T extends boolean = true> {
  */
 export interface ResearchersSelect<T extends boolean = true> {
   _order?: T;
+  portrait?: T;
   image?: T;
   title?: T;
   name?: T;
@@ -421,6 +492,60 @@ export interface ResearchersSelect<T extends boolean = true> {
   teamLeader?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media_select".
+ */
+export interface MediaSelect<T extends boolean = true> {
+  alt?: T;
+  credit?: T;
+  _objectKey?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        card?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        feature?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

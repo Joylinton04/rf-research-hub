@@ -6,6 +6,7 @@ import { Footer } from '@/components/Footer';
 import { ProjectExplorer, type ProjectSummary } from '@/components/ProjectExplorer';
 import { lexicalToParagraphs } from '@/lib/lexical';
 import { slugify } from '@/lib/slug';
+import { imageSrc } from '@/lib/media';
 
 // Dates are stored as midnight UTC. Formatting in the server's local zone would
 // roll "2026-08-01" back into July west of Greenwich, so pin the zone.
@@ -24,11 +25,12 @@ const splitAuthors = (authors: string): string[] =>
 export default async function ProjectsPage() {
   // Editable in the admin panel at /admin → Collections → Projects.
   const payload = await getPayload({ config });
+  // depth 1 so the `thumbnail` upload arrives as a Media doc with a URL.
   const { docs } = await payload.find({
     collection: 'projects',
     sort: '-date',
     limit: 100,
-    depth: 0,
+    depth: 1,
   });
 
   const projects: ProjectSummary[] = docs.map((project) => {
@@ -47,7 +49,7 @@ export default async function ProjectsPage() {
       searchText: [project.title, project.authors, ...paragraphs]
         .join(' ')
         .toLowerCase(),
-      image: project.image,
+      image: imageSrc(project.thumbnail, project.image, 'card'),
     };
   });
 

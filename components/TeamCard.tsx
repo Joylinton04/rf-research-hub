@@ -6,7 +6,7 @@ interface TeamCardProps {
   name: string;
   title: string;
   description: string;
-  image: string;
+  image: string | null;
   tag: string;
   socials?: {
     phone?: string | null;
@@ -27,13 +27,18 @@ export const TeamCard: React.FC<TeamCardProps> = ({
 
   return (
     <div className="group flex flex-col border border-outline-variant hover:border-primary hover:-translate-y-1 transition-all duration-300 shadow-sm hover:shadow-md mt-6">
+      {/* A researcher with no portrait yet falls back to the empty tile rather
+          than handing next/image an empty src. */}
       <div className="aspect-square bg-surface-container overflow-hidden relative">
-        <Image
-          src={image}
-          alt={name}
-          fill
-          className="w-full h-full object-cover transition-all duration-500"
-        />
+        {image && (
+          <Image
+            src={image}
+            alt={name}
+            fill
+            sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+            className="w-full h-full object-cover transition-all duration-500"
+          />
+        )}
       </div>
       <div className="p-6 flex-grow flex flex-col justify-between">
         <div>

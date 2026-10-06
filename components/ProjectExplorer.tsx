@@ -18,7 +18,7 @@ export interface ProjectSummary {
   excerpt: string;
   /** Title + authors + body, lowercased, for the search box to match against. */
   searchText: string;
-  image: string;
+  image: string | null;
 }
 
 interface ProjectExplorerProps {
@@ -162,12 +162,14 @@ export const ProjectExplorer: React.FC<ProjectExplorerProps> = ({
                 <div className="flex flex-col md:flex-row gap-6 items-start">
                   {/* Card Image preview */}
                   <div className="w-full md:w-48 h-36 shrink-0 bg-slate-50 rounded border border-slate-200 p-2 flex items-center justify-center overflow-hidden">
-                    {/* eslint-disable-next-line @next/next/no-img-element -- editors may point this at any external URL */}
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      className="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
-                    />
+                    {project.image && (
+                      /* eslint-disable-next-line @next/next/no-img-element -- object-contain on an unknown aspect ratio; next/image needs fixed dimensions */
+                      <img
+                        src={project.image}
+                        alt={project.title}
+                        className="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
+                      />
+                    )}
                   </div>
 
                   {/* Card Content */}
