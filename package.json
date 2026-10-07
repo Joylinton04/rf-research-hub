@@ -10,7 +10,6 @@
     "lint": "eslint",
     "payload": "payload",
     "seed": "payload run scripts/seed.ts",
-    "migrate:images": "payload run scripts/migrate-images.ts",
     "generate:types": "payload generate:types",
     "generate:importmap": "payload generate:importmap"
   },

@@ -3,6 +3,8 @@
 import React, { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { Search, Calendar, User, BookOpen, ChevronDown } from 'lucide-react';
+import Image from 'next/image';
+import empty from '@/public/empty.svg'
 
 /** A project flattened for display and client-side filtering. */
 export interface ProjectSummary {
@@ -51,6 +53,10 @@ export const ProjectExplorer: React.FC<ProjectExplorerProps> = ({
         (!selectedAuthor || project.authorKeys.includes(selectedAuthor)),
     );
   }, [projects, searchQuery, selectedYear, selectedAuthor]);
+
+  // "Nothing published" and "nothing matches" are different situations and get
+  // different copy — only the second one is worth offering a reset for.
+  const nothingPublished = projects.length === 0;
 
   const clearFilters = () => {
     setSearchQuery('');
@@ -132,7 +138,7 @@ export const ProjectExplorer: React.FC<ProjectExplorerProps> = ({
               {/* Apply Filters Button */}
               <button
                 type="submit"
-                className="w-full py-3 bg-[#0a0f1d] hover:bg-black text-white text-sm font-semibold rounded shadow transition-colors flex items-center justify-center gap-2"
+                className="w-full py-3 bg-[#0a0f1d] hover:bg-black text-white text-sm font-semibold rounded shadow transition-colors flex items-center justify-center gap-2 cursor-pointer"
               >
                 <span>Apply Filters</span>
               </button>
@@ -207,24 +213,42 @@ export const ProjectExplorer: React.FC<ProjectExplorerProps> = ({
               </article>
             ))
           ) : (
-            <div className="text-center py-12 bg-slate-50 rounded-lg border border-dashed border-slate-300">
-              <p className="text-slate-500 text-sm">
-                {projects.length === 0
-                  ? 'No projects have been published yet.'
-                  : 'No projects match your filter criteria.'}
-              </p>
-              {projects.length > 0 && (
+            <div className="flex flex-col items-center justify-center gap-6 rounded-lg px-6 py-14 text-center">
+              {/* Decorative, and the heading below already says what it says —
+                  so it is hidden from screen readers rather than described.
+                  No width/height: the static import carries the SVG's own
+                  749x457, and forcing a square would squash it. */}
+              <Image
+                src={empty}
+                alt=""
+                aria-hidden="true"
+                className="h-auto w-full max-w-[320px]"
+                priority={false}
+              />
+
+              <div className="flex flex-col items-center gap-2">
+                <h3 className="font-headline-sm text-headline-sm text-primary">
+                  {nothingPublished ? 'No projects yet' : 'No matching projects'}
+                </h3>
+                <p className="font-body-md text-body-md text-on-surface-variant">
+                  {nothingPublished
+                    ? 'Published research will appear here as the lab adds it.'
+                    : 'Nothing matches the current search and filters. Try a broader year or author, or clear them to start again.'}
+                </p>
+              </div>
+
+              {!nothingPublished && (
                 <button
+                  type="button"
                   onClick={clearFilters}
-                  className="mt-3 text-xs font-semibold text-primary hover:underline"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-semibold text-primary transition-all hover:bg-primary hover:text-white"
                 >
-                  Clear Filters
+                  Clear filters
                 </button>
               )}
             </div>
           )}
         </section>
-
       </div>
     </main>
   );

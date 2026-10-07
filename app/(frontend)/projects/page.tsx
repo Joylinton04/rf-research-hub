@@ -7,6 +7,7 @@ import { ProjectExplorer, type ProjectSummary } from '@/components/ProjectExplor
 import { lexicalToParagraphs } from '@/lib/lexical';
 import { slugify } from '@/lib/slug';
 import { imageSrc } from '@/lib/media';
+import Image from 'next/image';
 
 // Dates are stored as midnight UTC. Formatting in the server's local zone would
 // roll "2026-08-01" back into July west of Greenwich, so pin the zone.
@@ -49,7 +50,7 @@ export default async function ProjectsPage() {
       searchText: [project.title, project.authors, ...paragraphs]
         .join(' ')
         .toLowerCase(),
-      image: imageSrc(project.thumbnail, project.image, 'card'),
+      image: imageSrc(project.thumbnail, 'card'),
     };
   });
 

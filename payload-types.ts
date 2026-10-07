@@ -201,11 +201,7 @@ export interface Project {
   /**
    * Card image. Upload a file or pick one already in Media. Shown on the Projects grid and at the top of the write-up.
    */
-  thumbnail?: (number | null) | Media;
-  /**
-   * Legacy /public path. Replaced by Card image.
-   */
-  image?: string | null;
+  thumbnail: number | Media;
   /**
    * Body of the project write-up shown on the detail page.
    */
@@ -294,11 +290,7 @@ export interface Researcher {
   /**
    * Portrait. Upload a file or pick one already in Media. Rendered as a square, so a head-and-shoulders shot works best — the card centres and crops it.
    */
-  portrait?: (number | null) | Media;
-  /**
-   * Legacy /public path. Replaced by Portrait.
-   */
-  image?: string | null;
+  portrait: number | Media;
   /**
    * Role or academic title, shown in small caps above the name.
    */
@@ -466,7 +458,6 @@ export interface ProjectsSelect<T extends boolean = true> {
   authors?: T;
   date?: T;
   thumbnail?: T;
-  image?: T;
   content?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -478,7 +469,6 @@ export interface ProjectsSelect<T extends boolean = true> {
 export interface ResearchersSelect<T extends boolean = true> {
   _order?: T;
   portrait?: T;
-  image?: T;
   title?: T;
   name?: T;
   description?: T;

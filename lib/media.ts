@@ -7,27 +7,24 @@ type UploadField = number | Media | null | undefined;
 type SizeName = 'thumbnail' | 'card' | 'feature';
 
 /**
- * Resolves the `src` for an image that may already live in the media bucket or
- * may still be the legacy /public path it is being migrated off.
+ * Resolves the `src` for an image stored in the media bucket.
  *
  * `size` picks one of the generated derivatives, falling back to the original —
  * sharp skips any size wider than the source, so a small upload has no `card`.
  *
- * Returns null when there is nothing to render: an empty upload field, or a row
- * queried at depth 0, where `upload` is a bare id and carries no URL. Callers
- * render their placeholder rather than passing an empty string to next/image.
+ * Returns null rather than an empty string when there is nothing to render.
+ * The upload fields are `required`, so a populated row always has one; the null
+ * cases are a query run at depth 0 (where `upload` is a bare id carrying no
+ * URL) and the optional URL on Payload's generated Media type. Callers render a
+ * placeholder instead of handing next/image an unusable src.
  */
-export const imageSrc = (
-  upload: UploadField,
-  legacy?: string | null,
-  size?: SizeName,
-): string | null => {
+export const imageSrc = (upload: UploadField, size?: SizeName): string | null => {
   if (upload && typeof upload === 'object') {
     const sized = size ? upload.sizes?.[size]?.url : null;
-    return sized ?? upload.url ?? legacy ?? null;
+    return sized ?? upload.url ?? null;
   }
 
-  return legacy ?? null;
+  return null;
 };
 
 /**

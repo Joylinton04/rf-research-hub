@@ -1,15 +1,51 @@
 /**
  * Seeds the FAQs, Projects and Researchers collections with the content that
- * used to be hard-coded in the page components.
+ * used to be hard-coded in the page components, uploading the images each row
+ * needs to the media bucket along the way.
  *
  * Run with: npm run seed
  *
  * It is idempotent — a collection that already holds rows is left untouched, so
- * re-running never duplicates or overwrites an editor's changes.
+ * re-running never duplicates or overwrites an editor's changes. The uploads sit
+ * inside those same guards, so a second run does not re-upload the files.
  */
-import { getPayload } from 'payload';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+import { getPayload, type Payload } from 'payload';
 
 import config from '../payload.config';
+
+const dirname = path.dirname(fileURLToPath(import.meta.url));
+const publicDir = path.resolve(dirname, '../public');
+
+/**
+ * Uploads `file` from /public to the media bucket and returns the new Media
+ * row's id, reusing it if this run already stored that file.
+ *
+ * Passing `filePath` is what does the work: Payload reads the file from disk,
+ * runs it through sharp to build every size declared on the Media collection,
+ * and PUTs the original plus each derivative to the bucket.
+ */
+const uploadOnce = async (
+  payload: Payload,
+  cache: Map<string, number>,
+  file: string,
+  alt: string,
+): Promise<number> => {
+  const cached = cache.get(file);
+  if (cached !== undefined) return cached;
+
+  const media = await payload.create({
+    collection: 'media',
+    data: { alt },
+    filePath: path.join(publicDir, file),
+  });
+
+  payload.logger.info(`media: uploaded ${file} -> id ${media.id}`);
+  cache.set(file, media.id);
+  return media.id;
+};
 
 /** Minimal Lexical document: one root with a paragraph per string. */
 const richText = (paragraphs: string[]) => ({
@@ -117,16 +153,18 @@ const projects = [
     authors:
       'Dr. Eliel Keelson, Dr. Andrew Agbemenu, Prof. Eric Tchao, Kenneth Nsafoa-Yeboah, Bright Yeboah-Akowuah, Benjamin Kommey, Mohammad Monirujjaman Khan',
     date: '2026-08-01T00:00:00.000Z',
-    image: '/research-img.png',
+    thumbnailFile: 'research-img.png',
     content: richText(lorem),
   },
 ];
 
 // Image-to-name pairing confirmed with the maintainer: the portrait filenames,
-// not the order the names were first listed in, are authoritative.
+// not the order the names were first listed in, are authoritative — note that
+// prof-3 belongs to the second researcher and prof-2 to the third. Keep each
+// `portraitFile` next to its name so that cannot drift.
 const researchers = [
   {
-    image: '/prof-1.jpg',
+    portraitFile: 'prof-1.jpg',
     title: 'Professor',
     name: 'Prof. Sani Mubarak Ellis',
     description:
@@ -136,7 +174,7 @@ const researchers = [
     teamLeader: true,
   },
   {
-    image: '/prof-3-oteng.jpg',
+    portraitFile: 'prof-3-oteng.jpg',
     title: 'Lecturer',
     name: 'Dr. Kwame Oteng Gyasi',
     description:
@@ -145,7 +183,7 @@ const researchers = [
     tag: 'ANTENNA DESIGN',
   },
   {
-    image: '/prof-2-sarkodie.jpg',
+    portraitFile: 'prof-2-sarkodie.jpg',
     title: 'Lecturer',
     name: 'Dr. Kingsford Sarkodie Obeng Kwakye',
     description:
@@ -157,6 +195,8 @@ const researchers = [
 
 const seed = async () => {
   const payload = await getPayload({ config });
+  // Shared across both collections so a file used twice is stored once.
+  const uploads = new Map<string, number>();
 
   const existingFaqs = await payload.count({ collection: 'faqs' });
   if (existingFaqs.totalDocs > 0) {
@@ -174,8 +214,9 @@ const seed = async () => {
       `projects: ${existingProjects.totalDocs} row(s) already present — skipping.`,
     );
   } else {
-    for (const project of projects) {
-      await payload.create({ collection: 'projects', data: project });
+    for (const { thumbnailFile, ...project } of projects) {
+      const thumbnail = await uploadOnce(payload, uploads, thumbnailFile, project.title);
+      await payload.create({ collection: 'projects', data: { ...project, thumbnail } });
     }
     payload.logger.info(`projects: seeded ${projects.length} row(s).`);
   }
@@ -186,8 +227,10 @@ const seed = async () => {
       `researchers: ${existingResearchers.totalDocs} row(s) already present — skipping.`,
     );
   } else {
-    for (const researcher of researchers) {
-      await payload.create({ collection: 'researchers', data: researcher });
+    for (const { portraitFile, ...researcher } of researchers) {
+      // The person's name is the correct alt text for a portrait.
+      const portrait = await uploadOnce(payload, uploads, portraitFile, researcher.name);
+      await payload.create({ collection: 'researchers', data: { ...researcher, portrait } });
     }
     payload.logger.info(`researchers: seeded ${researchers.length} row(s).`);
   }

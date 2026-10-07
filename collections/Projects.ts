@@ -87,19 +87,10 @@ export const Projects: CollectionConfig = {
       name: 'thumbnail',
       type: 'upload',
       relationTo: 'media',
+      required: true,
       admin: {
         description:
           'Card image. Upload a file or pick one already in Media. Shown on the Projects grid and at the top of the write-up.',
-      },
-    },
-    {
-      // Superseded by `thumbnail`. See the note on Researchers.image — same
-      // reason, same removal condition.
-      name: 'image',
-      type: 'text',
-      admin: {
-        hidden: true,
-        description: 'Legacy /public path. Replaced by Card image.',
       },
     },
     {

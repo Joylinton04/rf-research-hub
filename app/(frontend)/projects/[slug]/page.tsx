@@ -67,7 +67,7 @@ export default async function ProjectPage({
   const project = await findProject(slug);
   if (!project) notFound();
 
-  const thumbnail = imageSrc(project.thumbnail, project.image, 'feature');
+  const thumbnail = imageSrc(project.thumbnail, 'feature');
 
   return (
     <>

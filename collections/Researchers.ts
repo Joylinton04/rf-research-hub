@@ -63,21 +63,10 @@ export const Researchers: CollectionConfig = {
       name: 'portrait',
       type: 'upload',
       relationTo: 'media',
+      required: true,
       admin: {
         description:
           'Portrait. Upload a file or pick one already in Media. Rendered as a square, so a head-and-shoulders shot works best — the card centres and crops it.',
-      },
-    },
-    {
-      // Superseded by `portrait`. Retained unhidden-but-optional only until
-      // scripts/migrate-images.ts has copied every path here into the bucket;
-      // it is the mapping that backfill reads, and the rollback if a row's
-      // upload goes wrong. Drop this field once the pages read `portrait`.
-      name: 'image',
-      type: 'text',
-      admin: {
-        hidden: true,
-        description: 'Legacy /public path. Replaced by Portrait.',
       },
     },
     {

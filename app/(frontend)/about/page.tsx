@@ -91,7 +91,7 @@ export default async function About() {
                   name={teamLeader.name}
                   title={teamLeader.title}
                   description={teamLeader.description}
-                  image={imageSrc(teamLeader.portrait, teamLeader.image, 'feature')}
+                  image={imageSrc(teamLeader.portrait, 'feature')}
                   tag={teamLeader.tag}
                   socials={teamLeader.socials}
                 />
@@ -113,7 +113,7 @@ export default async function About() {
                     name={member.name}
                     title={member.title}
                     description={member.description}
-                    image={imageSrc(member.portrait, member.image, 'card')}
+                    image={imageSrc(member.portrait, 'card')}
                     tag={member.tag}
                     socials={member.socials}
                   />
