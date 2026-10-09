@@ -8,6 +8,16 @@ import { Footer } from '@/components/Footer';
 import { TeamCard } from '@/components/TeamCard';
 import { TeamLeaderCard } from '@/components/TeamLeaderCard';
 import { imageSrc } from '@/lib/media';
+import { pageMetadata } from '@/lib/site';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = pageMetadata({
+  title: 'About',
+  description:
+    'The mission, facilities and people behind the Antenna Research Group at KNUST — RF characterization, antenna testing and signal processing research, and the faculty leading it.',
+  path: '/about',
+});
+
 
 export default async function About() {
   // Editable in the admin panel at /admin → Collections → Researchers. The

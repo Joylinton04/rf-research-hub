@@ -103,9 +103,9 @@ export const NotFoundContent = () => {
             </div>
           </div>
 
-          <h2 className="font-headline-lg text-headline-lg text-primary mb-3">
+          <h1 className="font-headline-lg text-headline-lg text-primary mb-3">
             Carrier Frequency Out of Range
-          </h2>
+          </h1>
           <p className="font-body-md text-body-md text-on-surface-variant mb-8 mx-auto leading-relaxed">
             The page you are trying to tune into is currently offline, out of range, or has migrated to another spectrum index.
           </p>

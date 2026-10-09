@@ -10,6 +10,9 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { lexicalToParagraphs } from '@/lib/lexical';
 import { imageSrc } from '@/lib/media';
+import { pageMetadata } from '@/lib/site';
+import { JsonLd } from '@/components/JsonLd';
+import { breadcrumbSchema, projectSchema } from '@/lib/structured-data';
 
 // Dates are stored as midnight UTC — see the note on the Projects listing page.
 const fullDate = new Intl.DateTimeFormat('en-US', {
@@ -52,9 +55,27 @@ export async function generateMetadata({
   const project = await findProject(slug);
   if (!project) return { title: 'Project not found' };
 
+  const excerpt = lexicalToParagraphs(project.content)[0]?.slice(0, 200) ?? '';
+
   return {
-    title: project.title,
-    description: lexicalToParagraphs(project.content)[0]?.slice(0, 200),
+    ...pageMetadata({
+      title: project.title,
+      description: excerpt,
+      path: `/projects/${project.slug}`,
+    }),
+    // A write-up is an article, not a generic page, and the dates let a
+    // crawler order it against the rest of the collection.
+    openGraph: {
+      type: 'article',
+      siteName: 'ARGG — Antenna Research Group Ghana',
+      title: project.title,
+      description: excerpt,
+      url: `/projects/${project.slug}`,
+      locale: 'en_GH',
+      publishedTime: project.date,
+      modifiedTime: project.updatedAt,
+      authors: project.authors.split(',').map((author) => author.trim()),
+    },
   };
 }
 
@@ -68,9 +89,19 @@ export default async function ProjectPage({
   if (!project) notFound();
 
   const thumbnail = imageSrc(project.thumbnail, 'feature');
+  const excerpt = lexicalToParagraphs(project.content)[0] ?? '';
 
   return (
     <>
+      <JsonLd data={projectSchema(project, { excerpt, image: thumbnail })} />
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: 'Home', path: '/' },
+          { name: 'Projects', path: '/projects' },
+          { name: project.title, path: `/projects/${project.slug}` },
+        ])}
+      />
+
       <Navbar />
 
       <main className="flex-grow">

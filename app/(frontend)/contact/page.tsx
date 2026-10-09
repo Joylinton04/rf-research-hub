@@ -8,12 +8,14 @@ import { Globe, Mail, MapPin, Phone } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { ContactForm } from '@/components/ContactForm';
+import { pageMetadata } from '@/lib/site';
 
-export const metadata: Metadata = {
-  title: 'Contact — ARGG',
+export const metadata: Metadata = pageMetadata({
+  title: 'Contact',
   description:
     'Get in touch with the Antenna Research Group at KNUST — address, email, phone and a message form that reaches the group directly.',
-};
+  path: '/contact',
+});
 
 // lucide dropped its brand glyphs in v1, so these are drawn inline from the
 // same paths the Links page already uses. `website` is the one real lucide icon

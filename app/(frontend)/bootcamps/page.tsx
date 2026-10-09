@@ -8,12 +8,14 @@ import { Banknote, Clock, MapPin } from 'lucide-react';
 import { Footer } from '@/components/Footer';
 import { Navbar } from '@/components/Navbar';
 import { imageAlt, imageSrc } from '@/lib/media';
+import { pageMetadata } from '@/lib/site';
 
-export const metadata: Metadata = {
-  title: 'Bootcamps — ARGG',
+export const metadata: Metadata = pageMetadata({
+  title: 'Bootcamps',
   description:
     'Intensive short courses from the Antenna Research Group on measurement tools, antenna principles and practical RF/microwave engineering.',
-};
+  path: '/bootcamps',
+});
 
 export default async function BootcampsPage() {
   // Editable in the admin panel at /admin → Collections → Bootcamps. The

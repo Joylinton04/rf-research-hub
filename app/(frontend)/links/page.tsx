@@ -4,12 +4,15 @@ import Image from 'next/image';
 import { ExternalLink, Radio, ArrowRight, Info, Globe } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/site';
 
-export const metadata = {
-  title: 'Links & Resources | ARGG - RF & Telecom Lab',
+export const metadata: Metadata = pageMetadata({
+  title: 'Links & Resources',
   description:
     'Connect directly with our lab initiatives, official university research groups, real-time broadcasts, and affiliated social channels.',
-};
+  path: '/links',
+});
 
 export default function LinksPage() {
   const featuredPortals = [

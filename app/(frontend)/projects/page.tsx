@@ -7,6 +7,8 @@ import { ProjectExplorer, type ProjectSummary } from '@/components/ProjectExplor
 import { lexicalToParagraphs } from '@/lib/lexical';
 import { slugify } from '@/lib/slug';
 import { imageSrc } from '@/lib/media';
+import { pageMetadata } from '@/lib/site';
+import type { Metadata } from 'next';
 import Image from 'next/image';
 
 // Dates are stored as midnight UTC. Formatting in the server's local zone would
@@ -22,6 +24,14 @@ const splitAuthors = (authors: string): string[] =>
     .split(',')
     .map((author) => author.trim())
     .filter(Boolean);
+
+export const metadata: Metadata = pageMetadata({
+  title: 'Projects',
+  description:
+    'Research projects and publications from the Antenna Research Group at KNUST, searchable by year and author.',
+  path: '/projects',
+});
+
 
 export default async function ProjectsPage() {
   // Editable in the admin panel at /admin → Collections → Projects.
@@ -70,6 +80,7 @@ export default async function ProjectsPage() {
     <>
       <Navbar />
 
+      <main className="flex-grow">
       {/* Hero Banner with Dark Ambient Lab Background */}
       <section className="relative bg-black text-white overflow-hidden min-h-[360px] lg:min-h-[420px] flex items-center">
         {/* Background lab photo positioned on right and faded seamlessly into black */}
@@ -105,6 +116,7 @@ export default async function ProjectsPage() {
       </section>
 
       <ProjectExplorer projects={projects} years={years} authors={authors} />
+      </main>
 
       <Footer />
     </>

@@ -7,12 +7,14 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { GalleryGrid, type GalleryImage } from '@/components/GalleryGrid';
 import { imageAlt, imageSrc } from '@/lib/media';
+import { pageMetadata } from '@/lib/site';
 
-export const metadata: Metadata = {
-  title: 'Gallery — ARGG',
+export const metadata: Metadata = pageMetadata({
+  title: 'Gallery',
   description:
     'Photographs from the R&S RF & Microwave Research Center at KNUST: antenna design sessions, VNA measurement work and the instrument benches the group builds on.',
-};
+  path: '/gallery',
+});
 
 export default async function GalleryPage() {
   // Editable in the admin panel at /admin → Collections → Gallery. The

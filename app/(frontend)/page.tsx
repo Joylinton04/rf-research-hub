@@ -10,6 +10,10 @@ import { ProjectCard } from "@/components/ProjectCard";
 import { MediaGallery, type MediaItem } from "@/components/MediaGallery";
 import { imageAlt, imageSrc } from "@/lib/media";
 import { lexicalToParagraphs } from "@/lib/lexical";
+import { pageMetadata, siteDescription, siteName } from "@/lib/site";
+import { JsonLd } from "@/components/JsonLd";
+import { organizationSchema, websiteSchema } from "@/lib/structured-data";
+import type { Metadata } from "next";
 import {
   Accordion,
   AccordionContent,
@@ -26,10 +30,26 @@ const monthYear = new Intl.DateTimeFormat("en-US", {
   timeZone: "UTC",
 });
 
+// The home page keeps the site name as its own title rather than taking the
+// "%s — ARGG" template, which would read "ARGG — ARGG".
+export const metadata: Metadata = {
+  ...pageMetadata({
+    title: siteName,
+    description: siteDescription,
+    path: "/",
+  }),
+  title: siteName,
+};
+
+
 export default async function Home() {
   // Editable in the admin panel at /admin → Globals → Home Hero.
   const payload = await getPayload({ config });
   const hero = await payload.findGlobal({ slug: "home-hero" });
+
+  // Feeds the Organization block below. Same global the Contact page renders,
+  // so the structured data and the visible contact details stay in step.
+  const contactDetails = await payload.findGlobal({ slug: "contact-details" });
 
   // Editable in the admin panel at /admin → Collections → FAQs. The collection
   // is `orderable`, so `_order` is the editor-controlled running order.
@@ -145,6 +165,11 @@ export default async function Home() {
 
   return (
     <>
+      {/* Identity of the site and the group behind it. Rendered once, here on
+          the home page, and referenced by @id from the other pages' blocks. */}
+      <JsonLd data={organizationSchema(contactDetails)} />
+      <JsonLd data={websiteSchema()} />
+
       <Navbar />
 
       <main className="flex-grow">
