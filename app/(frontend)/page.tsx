@@ -2,11 +2,14 @@ import React from "react";
 import { getPayload } from "payload";
 import config from "@payload-config";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ProjectCard } from "@/components/ProjectCard";
-import { MediaGallery } from "@/components/MediaGallery";
+import { MediaGallery, type MediaItem } from "@/components/MediaGallery";
+import { imageAlt, imageSrc } from "@/lib/media";
+import { lexicalToParagraphs } from "@/lib/lexical";
 import {
   Accordion,
   AccordionContent,
@@ -14,6 +17,14 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
+
+// Dates are stored as midnight UTC. Formatting in the server's local zone would
+// roll "2026-08-01" back into July west of Greenwich, so pin the zone.
+const monthYear = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  year: "numeric",
+  timeZone: "UTC",
+});
 
 export default async function Home() {
   // Editable in the admin panel at /admin → Globals → Home Hero.
@@ -29,76 +40,97 @@ export default async function Home() {
     depth: 0,
   });
 
+  // Editable in the admin panel at /admin → Collections → Gallery — the same
+  // rows /gallery renders, so a photograph is described once and appears in
+  // both places. depth 1 so the `image` upload arrives as a Media doc with a
+  // URL; at depth 0 Payload returns a bare id and every card would be empty.
+  const { docs: galleryRows } = await payload.find({
+    collection: "gallery",
+    sort: "_order",
+    limit: 100,
+    depth: 1,
+  });
 
-  const keyProjects = [
-    {
-      title: "6G ISAC Systems",
-      description:
-        "Integrating sensing and communication for 6G networks, enabling environmental awareness alongside high-speed data transfer.",
-      image:
-        "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=1200&q=80",
-      tag: "6G-01",
-      status: "Active Development",
-    },
-    {
-      title: "Antenna Design",
-      description:
-        "High-gain phased array systems for satellite and terrestrial links, focusing on beamforming efficiency and thermal management.",
-      image:
-        "https://images.unsplash.com/photo-1563770660941-20978e870e26?auto=format&fit=crop&w=1200&q=80",
-      tag: "RF-04",
-      status: "Lab Validated",
-    },
-    {
-      title: "Embedded IoT",
-      description:
-        "Low-power wireless sensor networks for industrial automation, optimized for interference-rich electromagnetic environments.",
-      image:
-        "https://images.unsplash.com/photo-1553406830-ef2513677841?auto=format&fit=crop&w=1200&q=80",
-      tag: "IOT-09",
-      status: "Pilot Phase",
-    },
-  ];
+  // Newest first, which is what the "SORT BY DATE" indicator above the grid
+  // claims. Sorted here rather than in the query so the undated rows can be
+  // placed deliberately: Postgres orders NULLs first on a DESC sort, which
+  // would put every photograph that has no date yet at the head of a list
+  // labelled newest-first. They go last instead, and since `find` returned them
+  // in `_order` and sort is stable, they keep the editor's order among
+  // themselves.
+  const sortedRows = [...galleryRows].sort((a, b) => {
+    if (!a.date && !b.date) return 0;
+    if (!a.date) return 1;
+    if (!b.date) return -1;
+    return new Date(b.date).getTime() - new Date(a.date).getTime();
+  });
 
-  const mediaItems = [
-    {
-      title: "Spectrum Analyzer Setup",
-      category: "HARDWARE SETUP",
-      filterTag: "PCB DESIGN",
-      description: "Real-time frequency analysis of sub-6GHz signals.",
-      image:
-        "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1200&q=80",
-      date: "OCT 2023",
-    },
-    {
-      title: "Anechoic Chamber Testing",
-      category: "FIELD TESTING",
-      filterTag: "ANTENNAS",
-      description:
-        "Antenna radiation pattern characterization in a controlled environment.",
-      image:
-        "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1200&q=80",
-      date: "NOV 2023",
-    },
-    {
-      title: "PCB Layout Design",
-      category: "RESEARCH DESIGN",
-      filterTag: "PCB DESIGN",
-      description: "Custom multi-layer RF board for satellite ground stations.",
-      image:
-        "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80",
-      date: "JAN 2024",
-    },
-    {
-      title: "5G Base Station Testbed",
-      category: "FIELD DEPLOYMENT",
-      filterTag: "5G/6G",
-      description: "Field deployment of mmWave small cells for urban testing.",
-      image:
-        "https://images.unsplash.com/photo-1563770660941-20978e870e26?auto=format&fit=crop&w=1200&q=80",
-      date: "FEB 2024",
-    },
-  ];
+  // Editable in the admin panel at /admin → Collections → Projects. Editors
+  // curate this strip with the "Show in Current Key Projects" checkbox; with
+  // nothing ticked the query comes back empty and the three most recent
+  // projects stand in, so the section is never blank just because no one has
+  // chosen yet.
+  const featuredProjects = await payload.find({
+    collection: "projects",
+    where: { featured: { equals: true } },
+    sort: "-date",
+    limit: 3,
+    depth: 1,
+  });
+
+  const { docs: projectRows } =
+    featuredProjects.docs.length > 0
+      ? featuredProjects
+      : await payload.find({
+          collection: "projects",
+          sort: "-date",
+          limit: 3,
+          depth: 1,
+        });
+
+  const keyProjects = projectRows.flatMap((project) => {
+    const image = imageSrc(project.thumbnail, "card");
+    if (!image) return [];
+
+    return [
+      {
+        id: project.id,
+        href: `/projects/${project.slug}`,
+        title: project.title,
+        // The write-up's opening paragraph, the same excerpt the Projects
+        // listing shows, so the two never drift apart.
+        description: lexicalToParagraphs(project.content)[0] ?? "",
+        image,
+        alt: imageAlt(project.thumbnail, project.title),
+        tag: project.tag ?? undefined,
+        status: project.status ?? undefined,
+      },
+    ];
+  });
+
+  const mediaItems: MediaItem[] = sortedRows.flatMap((row) => {
+    const src = imageSrc(row.image, "card");
+    if (!src) return [];
+
+    return [
+      {
+        id: row.id,
+        title: row.title,
+        category: row.category,
+        // The gallery category is already the axis a visitor would filter on.
+        filterTag: row.category,
+        description: row.description,
+        image: src,
+        alt: imageAlt(row.image, row.description),
+        // Left off entirely when the row has no date, rather than inventing one.
+        ...(row.date ? { date: monthYear.format(new Date(row.date)) } : {}),
+      },
+    ];
+    // One row of four here; /gallery is where the full set lives. Sliced after
+    // the map so a row whose upload failed to populate is skipped over rather
+    // than leaving a gap in the four.
+  }).slice(0, 4);
+
 
   const stats = [
     { value: "142+", label: "Journal Papers" },
@@ -107,7 +139,9 @@ export default async function Home() {
     { value: "08", label: "Corporate Partners" },
   ];
 
-  const filters = ["ALL", "ANTENNAS", "5G/6G", "PCB DESIGN"];
+  // Filter chips come from the published rows, so a chip can never be offered
+  // that would filter the grid down to nothing.
+  const filters = ["ALL", ...new Set(mediaItems.map((item) => item.filterTag))];
 
   return (
     <>
@@ -139,19 +173,25 @@ export default async function Home() {
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
                 <Link
-                  href="/publications"
+                  href="/about"
                   className="border border-primary text-primary px-8 py-3.5 font-label-caps text-label-caps rounded-sm hover:bg-surface-container-low transition-colors"
                 >
-                  Technical Specs
+                  About RF Research Group
                 </Link>
               </div>
             </div>
+            {/* hero Image */}
             <div className="lg:col-span-5 relative hidden lg:block h-full">
               <div className="aspect-square bg-primary-container rounded-lg overflow-hidden border border-outline shadow-2xl transform rotate-1 relative">
-                <img
-                  className="w-full h-full object-cover mix-blend-overlay"
+                {/* `fill` rather than width/height: the tile is sized by its
+                    square container, not by the file. */}
+                <Image
+                  className="object-cover mix-blend-overlay"
                   src="https://cellbusters.com/wp-content/uploads/2023/10/The-RF-Technology-Revolution-scaled.jpg"
                   alt="A high-tech printed circuit board designed for telecommunications"
+                  fill
+                  sizes="(min-width: 1024px) 40vw, 0px"
+                  priority
                 />
                 <div className="absolute inset-0 bg-gradient-to-tr from-primary via-transparent to-primary/20"></div>
                 <div className="absolute bottom-6 left-6 bg-surface/95 backdrop-blur-sm p-4 border border-outline-variant rounded-sm shadow-md animate-bounce-slow">
@@ -217,18 +257,26 @@ export default async function Home() {
                 View All Initiatives <span className="text-xs">→</span>
               </Link>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {keyProjects.map((project) => (
-                <ProjectCard
-                  key={project.tag}
-                  title={project.title}
-                  description={project.description}
-                  image={project.image}
-                  tag={project.tag}
-                  status={project.status}
-                />
-              ))}
-            </div>
+            {keyProjects.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {keyProjects.map((project) => (
+                  <ProjectCard
+                    key={project.id}
+                    href={project.href}
+                    title={project.title}
+                    description={project.description}
+                    image={project.image}
+                    alt={project.alt}
+                    tag={project.tag}
+                    status={project.status}
+                  />
+                ))}
+              </div>
+            ) : (
+              <p className="font-body-md text-body-md text-on-surface-variant">
+                No projects have been published yet.
+              </p>
+            )}
           </div>
         </section>
 

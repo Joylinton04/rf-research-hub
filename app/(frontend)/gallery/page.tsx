@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import { getPayload } from 'payload';
 import config from '@payload-config';
 import { Navbar } from '@/components/Navbar';
@@ -68,12 +69,16 @@ export default async function GalleryPage() {
           <div className="absolute inset-0 z-0 flex justify-end">
             <div className="relative h-full w-full lg:w-3/5">
               {hero && (
-                /* eslint-disable-next-line @next/next/no-img-element -- decorative full-bleed backdrop */
-                <img
+                /* `fill` rather than width/height: the backdrop is sized by its
+                   container, not by the file. */
+                <Image
                   src={hero.fullSrc}
                   alt=""
                   aria-hidden="true"
-                  className="h-full w-full object-cover object-center brightness-90 contrast-105"
+                  fill
+                  sizes="(min-width: 1024px) 60vw, 100vw"
+                  priority
+                  className="object-cover object-center brightness-90 contrast-105"
                 />
               )}
               <div className="absolute inset-0 bg-gradient-to-r from-black via-black/55 to-transparent lg:via-black/30"></div>

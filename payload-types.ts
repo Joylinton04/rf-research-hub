@@ -71,6 +71,7 @@ export interface Config {
     faqs: Faq;
     projects: Project;
     researchers: Researcher;
+    bootcamps: Bootcamp;
     gallery: Gallery;
     media: Media;
     'payload-kv': PayloadKv;
@@ -84,6 +85,7 @@ export interface Config {
     faqs: FaqsSelect<false> | FaqsSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     researchers: ResearchersSelect<false> | ResearchersSelect<true>;
+    bootcamps: BootcampsSelect<false> | BootcampsSelect<true>;
     gallery: GallerySelect<false> | GallerySelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
@@ -222,6 +224,18 @@ export interface Project {
     };
     [k: string]: unknown;
   };
+  /**
+   * Short reference code on the home page card, e.g. "6G-01". Left blank, the chip is not drawn.
+   */
+  tag?: string | null;
+  /**
+   * Where the work stands, e.g. "Active Development". Shown at the foot of the home page card, and omitted when blank.
+   */
+  status?: string | null;
+  /**
+   * Puts this project in the home page strip, newest first, up to three. Tick nothing and the strip simply falls back to the three most recent projects.
+   */
+  featured?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -330,6 +344,64 @@ export interface Researcher {
   createdAt: string;
 }
 /**
+ * Bootcamps listed on the Bootcamps page. Drag rows to reorder them — the top row is shown first.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bootcamps".
+ */
+export interface Bootcamp {
+  id: number;
+  _order?: string | null;
+  /**
+   * The promotional flyer. Shown at its own aspect ratio and nothing is cropped, so whatever shape the design is will be respected.
+   */
+  flyer: number | Media;
+  /**
+   * Name of the bootcamp as it appears on the flyer, e.g. "Vacation BootCamp 2026".
+   */
+  title: string;
+  /**
+   * Who is running it, shown in small caps above the title. Left blank, the line is omitted.
+   */
+  organiser?: string | null;
+  /**
+   * The write-up shown beside the flyer. Everything a prospective attendee should read before the details below.
+   */
+  description: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  /**
+   * Cost to attend, including the currency, e.g. "GHS 350". Omitted from the page when blank.
+   */
+  fee?: string | null;
+  /**
+   * How long it runs, e.g. "2 weeks". Omitted from the page when blank.
+   */
+  duration?: string | null;
+  /**
+   * Where it is held. Omitted from the page when blank.
+   */
+  venue?: string | null;
+  /**
+   * One extra line called out under the details, e.g. an internship credit. Omitted when blank.
+   */
+  note?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * Photographs on the Gallery page. Drag rows to reorder them — the top row is also the hero backdrop.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -350,6 +422,10 @@ export interface Gallery {
    * Small-caps chip above the title, e.g. FACILITY, LABORATORY, MEASUREMENT, EQUIPMENT. Displayed in caps.
    */
   category: string;
+  /**
+   * When the photograph was taken. Shown as a badge on the home page card, and omitted there when left blank — so leave it blank rather than guessing.
+   */
+  date?: string | null;
   /**
    * One line describing what is actually in the frame. This is also the image’s alt text, so describe the photo rather than adding detail that is not visible in it.
    */
@@ -396,6 +472,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'researchers';
         value: number | Researcher;
+      } | null)
+    | ({
+        relationTo: 'bootcamps';
+        value: number | Bootcamp;
       } | null)
     | ({
         relationTo: 'gallery';
@@ -493,6 +573,9 @@ export interface ProjectsSelect<T extends boolean = true> {
   date?: T;
   thumbnail?: T;
   content?: T;
+  tag?: T;
+  status?: T;
+  featured?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -519,6 +602,23 @@ export interface ResearchersSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bootcamps_select".
+ */
+export interface BootcampsSelect<T extends boolean = true> {
+  _order?: T;
+  flyer?: T;
+  title?: T;
+  organiser?: T;
+  description?: T;
+  fee?: T;
+  duration?: T;
+  venue?: T;
+  note?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "gallery_select".
  */
 export interface GallerySelect<T extends boolean = true> {
@@ -526,6 +626,7 @@ export interface GallerySelect<T extends boolean = true> {
   image?: T;
   title?: T;
   category?: T;
+  date?: T;
   description?: T;
   updatedAt?: T;
   createdAt?: T;

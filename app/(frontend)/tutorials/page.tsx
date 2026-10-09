@@ -6,8 +6,8 @@ const page = () => {
   return (
     <div>
       <Navbar/>
-      <div className='h-screen'>
-        
+      <div className='h-screen flex justify-center items-center'>
+        Coming soon...
       </div>
       <Footer/>
     </div>

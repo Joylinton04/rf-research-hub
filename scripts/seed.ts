@@ -1,7 +1,7 @@
 /**
- * Seeds the FAQs, Projects, Researchers and Gallery collections with the content
- * that used to be hard-coded in the page components, uploading the images each
- * row needs to the media bucket along the way.
+ * Seeds the FAQs, Projects, Researchers, Bootcamps and Gallery collections with
+ * the content that used to be hard-coded in the page components, uploading the
+ * images each row needs to the media bucket along the way.
  *
  * Run with: npm run seed
  *
@@ -198,6 +198,26 @@ const researchers = [
 //
 // The descriptions are the alt text as well as the captions, so they describe
 // what is actually in each frame rather than adding unseen detail.
+// The one bootcamp the group has published a flyer for. Every detail here is
+// read off that flyer — there is no date on it, so none is claimed.
+const bootcamps = [
+  {
+    flyerFile: 'bootcamp2026.jpeg',
+    title: 'Vacation BootCamp 2026',
+    organiser:
+      'Antenna Group in collaboration with the Rohde & Schwarz RF and Microwave Research Centre',
+    fee: 'GHS 350',
+    duration: '2 weeks',
+    venue: 'Rohde & Schwarz RF and Microwave Research Lab, behind Kumapley Auditorium',
+    note: '3rd year students can use this for their internship.',
+    description: richText([
+      'The Antenna Group runs Vacation BootCamp 2026 in collaboration with the Rohde & Schwarz RF and Microwave Research Centre — two weeks in the lab that houses the group’s measurement benches, working with the instruments rather than reading about them.',
+      'Sessions are held at the Rohde & Schwarz RF and Microwave Research Lab, behind Kumapley Auditorium. Registration is GHS 350 for the full two weeks.',
+      'Third-year students can count the bootcamp towards their internship requirement. For dates and registration, follow the group’s social channels.',
+    ]),
+  },
+];
+
 const gallery = [
   {
     imageFile: 'Rohde and Schwarz RF Microwave Research Center.jpg',
@@ -276,6 +296,20 @@ const seed = async () => {
       await payload.create({ collection: 'researchers', data: { ...researcher, portrait } });
     }
     payload.logger.info(`researchers: seeded ${researchers.length} row(s).`);
+  }
+
+  const existingBootcamps = await payload.count({ collection: 'bootcamps' });
+  if (existingBootcamps.totalDocs > 0) {
+    payload.logger.info(
+      `bootcamps: ${existingBootcamps.totalDocs} row(s) already present — skipping.`,
+    );
+  } else {
+    for (const { flyerFile, ...bootcamp } of bootcamps) {
+      // The flyer's own name is what a screen reader should hear for it.
+      const flyer = await uploadOnce(payload, uploads, flyerFile, `${bootcamp.title} flyer`);
+      await payload.create({ collection: 'bootcamps', data: { ...bootcamp, flyer } });
+    }
+    payload.logger.info(`bootcamps: seeded ${bootcamps.length} row(s).`);
   }
 
   const existingGallery = await payload.count({ collection: 'gallery' });

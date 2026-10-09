@@ -5,12 +5,18 @@ import { ArrowUpDown } from 'lucide-react';
 import { MediaCard } from '@/components/MediaCard';
 
 export interface MediaItem {
+  /** Row id from the Gallery collection, used as the React key. */
+  id: number;
   title: string;
   category: string;
+  /** Which filter chip shows this item. The Gallery `category` fills it. */
   filterTag: string;
   description: string;
   image: string;
-  date: string;
+  /** Alt text, which for a photograph is its description rather than its title. */
+  alt: string;
+  /** Absent when the row carries no date — the card then shows no badge. */
+  date?: string;
 }
 
 interface MediaGalleryProps {
@@ -64,14 +70,15 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({ items, filters }) =>
         </div>
 
         {visibleItems.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {visibleItems.map((item, idx) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {visibleItems.map((item) => (
               <MediaCard
-                key={idx}
+                key={item.id}
                 title={item.title}
                 category={item.category}
                 description={item.description}
                 image={item.image}
+                alt={item.alt}
                 date={item.date}
               />
             ))}

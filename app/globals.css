@@ -153,6 +153,15 @@ body {
   line-height: 32px;
 
 }
+
+@utility text-headline-md-2 {
+  font-family: var(--font-sans);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 32px;
+
+}
+
 @utility text-headline-sm {
   font-family: var(--font-sans);
   font-size: 20px;

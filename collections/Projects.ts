@@ -2,6 +2,11 @@ import { safeRevalidatePath } from '../lib/revalidate';
 import { slugify } from '../lib/slug';
 import type { CollectionConfig, FieldHook } from 'payload';
 
+const revalidateProjects = () => {
+  safeRevalidatePath('/projects', 'layout');
+  safeRevalidatePath('/');
+};
+
 // Fills the slug from the title when the editor leaves it blank, and normalises
 // whatever they do type so the value is always URL-safe. `originalDoc` keeps a
 // partial update (one that sends no title and no slug) from blanking the field.
@@ -11,7 +16,8 @@ const formatSlug: FieldHook = ({ data, originalDoc, value }) => {
   return originalDoc?.slug ?? value;
 };
 
-// Long-form project write-ups. These back /projects and /projects/[slug].
+// Long-form project write-ups. These back /projects, /projects/[slug] and the
+// Current Key Projects strip on the home page.
 export const Projects: CollectionConfig = {
   slug: 'projects',
   admin: {
@@ -27,17 +33,10 @@ export const Projects: CollectionConfig = {
     delete: ({ req }) => Boolean(req.user),
   },
   hooks: {
-    // /projects and its detail routes are statically prerendered.
-    afterChange: [
-      () => {
-        safeRevalidatePath('/projects', 'layout');
-      },
-    ],
-    afterDelete: [
-      () => {
-        safeRevalidatePath('/projects', 'layout');
-      },
-    ],
+    // /projects and its detail routes are statically prerendered, and so is the
+    // home page that now shows three of these rows.
+    afterChange: [revalidateProjects],
+    afterDelete: [revalidateProjects],
   },
   fields: [
     {
@@ -99,6 +98,34 @@ export const Projects: CollectionConfig = {
       required: true,
       admin: {
         description: 'Body of the project write-up shown on the detail page.',
+      },
+    },
+    {
+      name: 'tag',
+      type: 'text',
+      admin: {
+        description:
+          'Short reference code on the home page card, e.g. "6G-01". Left blank, the chip is not drawn.',
+      },
+    },
+    {
+      name: 'status',
+      type: 'text',
+      admin: {
+        description:
+          'Where the work stands, e.g. "Active Development". Shown at the foot of the home page card, and omitted when blank.',
+      },
+    },
+    {
+      name: 'featured',
+      label: 'Show in Current Key Projects',
+      type: 'checkbox',
+      defaultValue: false,
+      index: true,
+      admin: {
+        position: 'sidebar',
+        description:
+          'Puts this project in the home page strip, newest first, up to three. Tick nothing and the strip simply falls back to the three most recent projects.',
       },
     },
   ],

@@ -7,6 +7,7 @@ import { s3Storage } from '@payloadcms/storage-s3';
 import { buildConfig } from 'payload';
 import sharp from 'sharp';
 
+import { Bootcamps } from './collections/Bootcamps';
 import { Faqs } from './collections/Faqs';
 import { Gallery } from './collections/Gallery';
 import { Media } from './collections/Media';
@@ -25,7 +26,7 @@ export default buildConfig({
       titleSuffix: '— ARGG Admin',
     },
   },
-  collections: [Users, Faqs, Projects, Researchers, Gallery, Media],
+  collections: [Users, Faqs, Projects, Researchers, Bootcamps, Gallery, Media],
   globals: [HomeHero],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

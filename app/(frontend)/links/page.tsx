@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ExternalLink, Radio, ArrowRight, Info, Globe } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
@@ -94,10 +95,15 @@ export default function LinksPage() {
           {/* Background photo positioned on right and faded seamlessly into black */}
           <div className="absolute inset-0 z-0 flex justify-end">
             <div className="relative w-full lg:w-3/5 h-full">
-              <img
+              {/* `fill` rather than width/height: the backdrop is sized by
+                  its container, not by the file. */}
+              <Image
                 src="/gallery-1.jpeg"
                 alt="ARGG Links and Research Media"
-                className="w-full h-full object-cover object-center brightness-90 contrast-105"
+                fill
+                sizes="(min-width: 1024px) 60vw, 100vw"
+                priority
+                className="object-cover object-center brightness-90 contrast-105"
               />
               {/* Multi-layer gradient overlays for smooth dark blending */}
               <div className="absolute inset-0 bg-gradient-to-r from-black via-black/55 lg:via-black/30 to-transparent"></div>
