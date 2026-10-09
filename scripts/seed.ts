@@ -1,7 +1,7 @@
 /**
- * Seeds the FAQs, Projects and Researchers collections with the content that
- * used to be hard-coded in the page components, uploading the images each row
- * needs to the media bucket along the way.
+ * Seeds the FAQs, Projects, Researchers and Gallery collections with the content
+ * that used to be hard-coded in the page components, uploading the images each
+ * row needs to the media bucket along the way.
  *
  * Run with: npm run seed
  *
@@ -193,6 +193,49 @@ const researchers = [
   },
 ];
 
+// Photographs for /gallery, in the order the page used to list them. The first
+// one is also the page's hero backdrop, so it stays at the top.
+//
+// The descriptions are the alt text as well as the captions, so they describe
+// what is actually in each frame rather than adding unseen detail.
+const gallery = [
+  {
+    imageFile: 'Rohde and Schwarz RF Microwave Research Center.jpg',
+    title: 'R&S RF & Microwave Research Center',
+    category: 'FACILITY',
+    description:
+      'The research center at KNUST, Department of Telecommunication Engineering, with its activity banner and workstation benches.',
+  },
+  {
+    imageFile: 'Array Antennas Lab.jpg',
+    title: 'Array Antenna Design Session',
+    category: 'LABORATORY',
+    description:
+      'Students working through an array antenna layout on screen, alongside a vector network analyzer and bench power supply.',
+  },
+  {
+    imageFile: 'VNA Gain Measurement with Dr. Ellis.jpg',
+    title: 'VNA Gain Measurement',
+    category: 'MEASUREMENT',
+    description:
+      'Researchers taking a gain measurement, with a planar antenna under test cabled to the bench instruments.',
+  },
+  {
+    imageFile: 'Rohde and Schwarz Knust Lab.jpeg',
+    title: 'Lab Workstation',
+    category: 'LABORATORY',
+    description:
+      'Group members at a lab workstation, with a board-milling setup and copper-clad substrate on the bench.',
+  },
+  {
+    imageFile: 'Rohde Schwarz Equipment Setup.webp',
+    title: 'Instrument Bench',
+    category: 'EQUIPMENT',
+    description:
+      'A test bench of oscilloscope, signal generator, power supply and spectrum analyzers cabled to a device under test.',
+  },
+];
+
 const seed = async () => {
   const payload = await getPayload({ config });
   // Shared across both collections so a file used twice is stored once.
@@ -233,6 +276,20 @@ const seed = async () => {
       await payload.create({ collection: 'researchers', data: { ...researcher, portrait } });
     }
     payload.logger.info(`researchers: seeded ${researchers.length} row(s).`);
+  }
+
+  const existingGallery = await payload.count({ collection: 'gallery' });
+  if (existingGallery.totalDocs > 0) {
+    payload.logger.info(
+      `gallery: ${existingGallery.totalDocs} row(s) already present — skipping.`,
+    );
+  } else {
+    for (const { imageFile, ...item } of gallery) {
+      // For a photograph the caption description is also the right alt text.
+      const image = await uploadOnce(payload, uploads, imageFile, item.description);
+      await payload.create({ collection: 'gallery', data: { ...item, image } });
+    }
+    payload.logger.info(`gallery: seeded ${gallery.length} row(s).`);
   }
 
   await payload.destroy();

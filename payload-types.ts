@@ -71,6 +71,7 @@ export interface Config {
     faqs: Faq;
     projects: Project;
     researchers: Researcher;
+    gallery: Gallery;
     media: Media;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -83,6 +84,7 @@ export interface Config {
     faqs: FaqsSelect<false> | FaqsSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     researchers: ResearchersSelect<false> | ResearchersSelect<true>;
+    gallery: GallerySelect<false> | GallerySelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -328,6 +330,34 @@ export interface Researcher {
   createdAt: string;
 }
 /**
+ * Photographs on the Gallery page. Drag rows to reorder them — the top row is also the hero backdrop.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "gallery".
+ */
+export interface Gallery {
+  id: number;
+  _order?: string | null;
+  /**
+   * The photograph. Upload a file or pick one already in Media. Nothing is cropped — the masonry grid keeps whatever shape the file has.
+   */
+  image: number | Media;
+  /**
+   * Caption heading, e.g. "VNA Gain Measurement".
+   */
+  title: string;
+  /**
+   * Small-caps chip above the title, e.g. FACILITY, LABORATORY, MEASUREMENT, EQUIPMENT. Displayed in caps.
+   */
+  category: string;
+  /**
+   * One line describing what is actually in the frame. This is also the image’s alt text, so describe the photo rather than adding detail that is not visible in it.
+   */
+  description: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -366,6 +396,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'researchers';
         value: number | Researcher;
+      } | null)
+    | ({
+        relationTo: 'gallery';
+        value: number | Gallery;
       } | null)
     | ({
         relationTo: 'media';
@@ -480,6 +514,19 @@ export interface ResearchersSelect<T extends boolean = true> {
       };
   tag?: T;
   teamLeader?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "gallery_select".
+ */
+export interface GallerySelect<T extends boolean = true> {
+  _order?: T;
+  image?: T;
+  title?: T;
+  category?: T;
+  description?: T;
   updatedAt?: T;
   createdAt?: T;
 }
