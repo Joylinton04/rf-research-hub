@@ -73,6 +73,7 @@ export interface Config {
     researchers: Researcher;
     bootcamps: Bootcamp;
     gallery: Gallery;
+    'contact-messages': ContactMessage;
     media: Media;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -87,6 +88,7 @@ export interface Config {
     researchers: ResearchersSelect<false> | ResearchersSelect<true>;
     bootcamps: BootcampsSelect<false> | BootcampsSelect<true>;
     gallery: GallerySelect<false> | GallerySelect<true>;
+    'contact-messages': ContactMessagesSelect<false> | ContactMessagesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -99,9 +101,11 @@ export interface Config {
   fallbackLocale: null;
   globals: {
     'home-hero': HomeHero;
+    'contact-details': ContactDetail;
   };
   globalsSelect: {
     'home-hero': HomeHeroSelect<false> | HomeHeroSelect<true>;
+    'contact-details': ContactDetailsSelect<false> | ContactDetailsSelect<true>;
   };
   locale: null;
   widgets: {
@@ -434,6 +438,31 @@ export interface Gallery {
   createdAt: string;
 }
 /**
+ * Messages sent through the contact form. Newest first.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-messages".
+ */
+export interface ContactMessage {
+  id: number;
+  /**
+   * Sender’s name, as they typed it.
+   */
+  name: string;
+  /**
+   * Reply address. Treat it as unverified — nobody confirmed it.
+   */
+  email: string;
+  subject: string;
+  message: string;
+  /**
+   * Tick once someone has answered, so the rest stand out as outstanding.
+   */
+  handled?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -480,6 +509,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'gallery';
         value: number | Gallery;
+      } | null)
+    | ({
+        relationTo: 'contact-messages';
+        value: number | ContactMessage;
       } | null)
     | ({
         relationTo: 'media';
@@ -633,6 +666,19 @@ export interface GallerySelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-messages_select".
+ */
+export interface ContactMessagesSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  subject?: T;
+  message?: T;
+  handled?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
@@ -745,12 +791,80 @@ export interface HomeHero {
   createdAt?: string | null;
 }
 /**
+ * Address, email, phone and social links shown on the Contact page.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-details".
+ */
+export interface ContactDetail {
+  id: number;
+  /**
+   * Headline on the details card.
+   */
+  heading: string;
+  /**
+   * Short paragraph under the headline.
+   */
+  intro: string;
+  /**
+   * Postal address. Line breaks are preserved exactly as typed.
+   */
+  address?: string | null;
+  /**
+   * Rendered as a mailto: link. Omitted from the card when blank.
+   */
+  email?: string | null;
+  /**
+   * Rendered as a tel: link. Omitted from the card when blank.
+   */
+  phone?: string | null;
+  /**
+   * Icons under "Follow Us". Drag to reorder; leave empty to hide the row.
+   */
+  socials?:
+    | {
+        /**
+         * Picks the icon. "Website" is the fallback for anything else.
+         */
+        platform: 'x' | 'linkedin' | 'instagram' | 'youtube' | 'website';
+        /**
+         * Full URL including https://.
+         */
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "home-hero_select".
  */
 export interface HomeHeroSelect<T extends boolean = true> {
   title?: T;
   description?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-details_select".
+ */
+export interface ContactDetailsSelect<T extends boolean = true> {
+  heading?: T;
+  intro?: T;
+  address?: T;
+  email?: T;
+  phone?: T;
+  socials?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

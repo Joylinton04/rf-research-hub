@@ -57,17 +57,24 @@ export const Navbar = () => {
 
         {/* Trailing Action & Search */}
         <div className="hidden md:flex items-center gap-6">
-          <button className="bg-primary text-on-primary px-6 py-2.5 font-label-caps text-label-caps rounded-sm hover:bg-primary-container active:scale-95 transition-all flex items-center gap-2 shadow-xs">
+          <Link
+            href="/contact"
+            className="bg-primary text-on-primary px-6 py-2.5 font-label-caps text-label-caps rounded-sm hover:bg-primary-container active:scale-95 transition-all flex items-center gap-2 shadow-xs cursor-pointer"
+          >
             <PhoneCall className="w-4 h-4" />
             Contact Us
-          </button>
+          </Link>
         </div>
 
         {/* Mobile Menu Button */}
         <div className="flex md:hidden items-center gap-4">
-          <button className="bg-primary text-on-primary px-4 py-2 font-label-caps text-label-caps rounded-sm hover:bg-primary-container active:scale-95 transition-all text-xs shadow-xs">
+          <Link
+            href="/contact"
+            onClick={() => setIsOpen(false)}
+            className="bg-primary text-on-primary px-4 py-2 font-label-caps text-label-caps rounded-sm hover:bg-primary-container active:scale-95 transition-all text-xs shadow-xs"
+          >
             Contact
-          </button>
+          </Link>
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="text-on-surface hover:text-primary transition-colors focus:outline-none p-1.5 rounded-sm hover:bg-black/5"

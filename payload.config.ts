@@ -8,12 +8,14 @@ import { buildConfig } from 'payload';
 import sharp from 'sharp';
 
 import { Bootcamps } from './collections/Bootcamps';
+import { ContactMessages } from './collections/ContactMessages';
 import { Faqs } from './collections/Faqs';
 import { Gallery } from './collections/Gallery';
 import { Media } from './collections/Media';
 import { Projects } from './collections/Projects';
 import { Researchers } from './collections/Researchers';
 import { Users } from './collections/Users';
+import { ContactDetails } from './globals/ContactDetails';
 import { HomeHero } from './globals/HomeHero';
 
 const filename = fileURLToPath(import.meta.url);
@@ -26,8 +28,8 @@ export default buildConfig({
       titleSuffix: '— ARGG Admin',
     },
   },
-  collections: [Users, Faqs, Projects, Researchers, Bootcamps, Gallery, Media],
-  globals: [HomeHero],
+  collections: [Users, Faqs, Projects, Researchers, Bootcamps, Gallery, ContactMessages, Media],
+  globals: [HomeHero, ContactDetails],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

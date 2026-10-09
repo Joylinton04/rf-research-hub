@@ -1,7 +1,8 @@
 /**
- * Seeds the FAQs, Projects, Researchers, Bootcamps and Gallery collections with
- * the content that used to be hard-coded in the page components, uploading the
- * images each row needs to the media bucket along the way.
+ * Seeds the FAQs, Projects, Researchers, Bootcamps and Gallery collections, and
+ * the Contact Details global, with the content that used to be hard-coded in
+ * the page components, uploading the images each row needs to the media bucket
+ * along the way.
  *
  * Run with: npm run seed
  *
@@ -256,6 +257,28 @@ const gallery = [
   },
 ];
 
+// The Contact Details global. The socials are the group's own accounts, taken
+// from the Links page. Email and phone are deliberately absent: nobody has
+// given the group's real ones, and a contact page is the last place to guess —
+// a wrong address silently swallows messages. The card omits each until it is
+// filled in at /admin → Globals → Contact Details.
+const contactDetails = {
+  heading: 'Get in Touch',
+  intro:
+    'Use the details below to contact us directly, or fill out the form and we’ll get back to you as soon as possible.',
+  address: 'Faculty of Electrical and Computer Engineering\nKNUST - Kumasi\nGhana',
+  socials: [
+    { platform: 'website' as const, url: 'https://antennagroupknust.com/' },
+    { platform: 'x' as const, url: 'https://x.com/antennaknust' },
+    {
+      platform: 'linkedin' as const,
+      url: 'https://www.linkedin.com/company/rohde-schwarz-radio-frequency-and-microwave-lab/',
+    },
+    { platform: 'instagram' as const, url: 'https://www.instagram.com/antennaknust/' },
+    { platform: 'youtube' as const, url: 'https://www.youtube.com/@AntennaGroupStudios' },
+  ],
+};
+
 const seed = async () => {
   const payload = await getPayload({ config });
   // Shared across both collections so a file used twice is stored once.
@@ -324,6 +347,18 @@ const seed = async () => {
       await payload.create({ collection: 'gallery', data: { ...item, image } });
     }
     payload.logger.info(`gallery: seeded ${gallery.length} row(s).`);
+  }
+
+  // Globals always exist, so there is no count to guard on: a global that has
+  // never been saved comes back with only its field defaults. Writing only in
+  // that case keeps the seed from overwriting an editor's real contact details
+  // on a re-run.
+  const existingContact = await payload.findGlobal({ slug: 'contact-details' });
+  if (existingContact.address || existingContact.email || existingContact.phone) {
+    payload.logger.info('contact-details: already filled in — skipping.');
+  } else {
+    await payload.updateGlobal({ slug: 'contact-details', data: contactDetails });
+    payload.logger.info('contact-details: seeded.');
   }
 
   await payload.destroy();
