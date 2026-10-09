@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
-  allowedDevOrigins: ["192.168.8.179:3000","10.132.93.221"],
+  allowedDevOrigins: ["192.168.1.172"],
   images: {
     // `domains` is deprecated since Next 14 — it cannot restrict protocol, port
     // or pathname, so a shared host would be allowed to serve anything through

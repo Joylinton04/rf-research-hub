@@ -87,7 +87,7 @@ export const Navbar = () => {
 
       {/* Mobile Navigation Panel */}
       {isOpen && (
-        <div className="md:hidden bg-white/90 backdrop-blur-xl border-b border-outline-variant/60 py-4 px-6 absolute top-20 left-0 w-full shadow-lg transition-all duration-300">
+        <div className="md:hidden bg-white/99 backdrop-blur-xl border-b border-outline-variant/60 py-4 px-6 absolute top-20 left-0 w-full shadow-lg transition-all duration-300">
           <div className="flex flex-col gap-4">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
