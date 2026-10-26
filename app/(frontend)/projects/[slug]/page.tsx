@@ -102,11 +102,11 @@ export default async function ProjectPage({
         ])}
       />
 
-      <Navbar />
+      <Navbar overlay />
 
       <main className="flex-grow">
         {/* Header */}
-        <section className="bg-black text-white px-6 lg:px-12 py-14 lg:py-20">
+        <section className="bg-black text-white px-6 lg:px-12 pt-34 pb-14 lg:pt-40 lg:pb-20">
           <div className="max-w-container-max mx-auto">
             <Link
               href="/projects"

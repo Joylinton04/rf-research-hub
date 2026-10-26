@@ -47,11 +47,11 @@ export default async function ContactPage() {
 
   return (
     <>
-      <Navbar />
+      <Navbar overlay />
 
       <main className="flex-grow">
         {/* Hero Banner — same dark-photo treatment as the other inner pages. */}
-        <section className="relative flex min-h-[350px] items-center overflow-hidden bg-black text-white lg:min-h-[410px]">
+        <section className="relative flex min-h-[430px] items-center overflow-hidden bg-black pt-20 text-white lg:min-h-[490px]">
           <div className="absolute inset-0 z-0 flex justify-end">
             <div className="relative h-full w-full lg:w-3/5">
               {/* `fill` rather than width/height: the backdrop is sized by its

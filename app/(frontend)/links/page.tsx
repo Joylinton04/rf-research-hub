@@ -90,11 +90,11 @@ export default function LinksPage() {
 
   return (
     <>
-      <Navbar />
+      <Navbar overlay />
 
       <main className="min-h-screen bg-surface flex flex-col">
         {/* Hero Banner with Dark Ambient Lab Background */}
-        <section className="relative bg-black text-white overflow-hidden min-h-[360px] lg:min-h-[420px] flex items-center">
+        <section className="relative bg-black text-white overflow-hidden min-h-[440px] lg:min-h-[500px] pt-20 flex items-center">
           {/* Background photo positioned on right and faded seamlessly into black */}
           <div className="absolute inset-0 z-0 flex justify-end">
             <div className="relative w-full lg:w-3/5 h-full">

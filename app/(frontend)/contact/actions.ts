@@ -9,8 +9,8 @@ import { contactFormSchema, type ContactFormResult } from '@/lib/contact';
  * Stores one contact form submission.
  *
  * The row lands in the Messages collection, which editors read at
- * /admin → Inbox → Messages. Nothing is emailed: the Payload config declares no
- * email adapter, so adding one is what would turn this into a notification.
+ * /admin → Inbox → Messages. The collection's afterChange hook also emails the
+ * group a notification.
  */
 export const submitContactForm = async (values: unknown): Promise<ContactFormResult> => {
   // Re-validated server-side. The client resolver runs on the same schema, but

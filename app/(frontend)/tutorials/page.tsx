@@ -23,15 +23,9 @@ export default function TutorialsPage() {
       <Navbar />
 
       <main className="flex flex-grow items-center justify-center px-6 py-24 lg:px-12">
-        <div className="max-w-xl text-center">
-          <h1 className="font-headline-lg text-headline-lg text-primary">
-            Tutorials
-          </h1>
-          <p className="mt-3 font-body-md text-body-md leading-relaxed text-on-surface-variant">
-            Step-by-step guides on antenna design, RF measurement and working
-            the lab instruments are on the way. Coming soon.
-          </p>
-        </div>
+        <p className="mt-3 font-body-md text-body-md leading-relaxed text-on-surface-variant">
+          Coming soon.
+        </p>
       </main>
 
       <Footer />

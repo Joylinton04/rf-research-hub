@@ -39,11 +39,11 @@ export default async function About() {
 
   return (
     <>
-      <Navbar />
+      <Navbar overlay />
 
       <main className="min-h-screen">
         {/* Hero Banner with Dark Ambient Lab Background */}
-        <section className="relative bg-black text-white overflow-hidden min-h-[360px] lg:min-h-[420px] flex items-center">
+        <section className="relative bg-black text-white overflow-hidden min-h-[440px] lg:min-h-[500px] pt-20 flex items-center">
           {/* Background lab photo positioned on right and faded seamlessly into black */}
           <div className="absolute inset-0 z-0 flex justify-end">
             <div className="relative w-full lg:w-3/5 h-full">
@@ -139,56 +139,6 @@ export default async function About() {
           </div>
         </section>
 
-        {/* Section 3: Technical Readout Section (Atmospheric) */}
-        <section className="bg-tertiary py-16 relative overflow-hidden">
-          <div className="absolute top-0 right-0 p-6">
-            <div className="flex gap-1.5">
-              <div className="w-1.5 h-8 bg-secondary opacity-25"></div>
-              <div className="w-1.5 h-12 bg-secondary opacity-45"></div>
-              <div className="w-1.5 h-6 bg-secondary opacity-15"></div>
-            </div>
-          </div>
-          <div className="max-w-container-max mx-auto px-6 lg:px-12">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <h3 className="font-headline-md text-headline-md text-on-primary mb-4">
-                  Advancing the Spectrum
-                </h3>
-                <p className="font-body-md text-body-md text-on-tertiary-container leading-relaxed">
-                  Our research output is consistently ranked in the top percentile for spectral efficiency innovations. We utilize real-time oscilloscope data to refine our theoretical models, ensuring that every publication is backed by rigorous empirical testing.
-                </p>
-              </div>
-              <div className="bg-black/20 p-6 rounded-sm border border-white/10 backdrop-blur-sm">
-                <div className="flex justify-between items-center mb-6">
-                  <span className="font-code-md text-code-md text-secondary font-semibold flex items-center gap-2">
-                    <Radio className="w-4 h-4 text-secondary animate-pulse" />
-                    SPECTRUM_ANALYSIS_V.04
-                  </span>
-                  <span className="font-label-caps text-[10px] text-white/50">ACTIVE MONITOR</span>
-                </div>
-                <div className="space-y-4">
-                  <div className="h-1.5 bg-white/5 w-full relative overflow-hidden rounded-sm">
-                    <div className="absolute inset-0 w-full h-full animate-shimmer-medium">
-                      <div className="h-full bg-secondary w-3/4"></div>
-                    </div>
-                  </div>
-                  <div className="h-1.5 bg-white/5 w-full relative overflow-hidden rounded-sm">
-                    <div className="absolute inset-0 w-full h-full animate-shimmer-slow">
-                      <div className="h-full bg-secondary w-1/2"></div>
-                    </div>
-                  </div>
-                  <div className="h-1.5 bg-white/5 w-full relative overflow-hidden rounded-sm">
-                    <div className="absolute inset-0 w-full h-full animate-shimmer-fast">
-                      <div className="h-full bg-secondary w-5/6"></div>
-                    </div>
-                  </div>
-                </div>
-
-
-              </div>
-            </div>
-          </div>
-        </section>
       </main>
 
       <Footer />
