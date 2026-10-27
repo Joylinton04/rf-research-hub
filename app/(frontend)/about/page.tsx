@@ -1,10 +1,10 @@
 import React from 'react';
-import Image from 'next/image';
 import { getPayload } from 'payload';
 import config from '@payload-config';
 import { Radio } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { PageHero } from '@/components/PageHero';
 import { TeamCard } from '@/components/TeamCard';
 import { TeamLeaderCard } from '@/components/TeamLeaderCard';
 import { imageSrc } from '@/lib/media';
@@ -42,39 +42,7 @@ export default async function About() {
       <Navbar overlay />
 
       <main className="min-h-screen">
-        {/* Hero Banner with Dark Ambient Lab Background */}
-        <section className="relative bg-black text-white overflow-hidden min-h-[440px] lg:min-h-[500px] pt-20 flex items-center">
-          {/* Background lab photo positioned on right and faded seamlessly into black */}
-          <div className="absolute inset-0 z-0 flex justify-end">
-            <div className="relative w-full lg:w-3/5 h-full">
-              {/* `fill` rather than width/height: the backdrop is sized by
-                  its container, not by the file. */}
-              <Image
-                src="/rf-lab.jpg"
-                alt="Research Laboratory"
-                fill
-                sizes="(min-width: 1024px) 60vw, 100vw"
-                priority
-                className="object-cover object-center brightness-90 contrast-105"
-              />
-              {/* Multi-layer gradient overlays for smooth dark blending */}
-              <div className="absolute inset-0 bg-gradient-to-r from-black via-black/55 lg:via-black/30 to-transparent"></div>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20"></div>
-            </div>
-          </div>
-
-          {/* Hero Content */}
-          <div className="relative z-10 max-w-container-max mx-auto px-6 lg:px-12 py-16 w-full">
-            <div className="max-w-2xl">
-              <h1 className="text-4xl sm:text-5xl lg:text-[54px] font-extrabold tracking-tight text-white mb-5 leading-tight font-sans">
-                Our Mission & Infrastructure
-              </h1>
-              <p className="text-base sm:text-xl text-slate-300 leading-relaxed font-medium">
-                Our laboratory is dedicated to bridging the gap between theoretical electromagnetics and practical telecommunications hardware. We provide state-of-the-art facilities for RF characterization, antenna testing, and signal processing research.
-              </p>
-            </div>
-          </div>
-        </section>
+        <PageHero page="about" />
 
 
         {/* Section 2: Team Grid */}

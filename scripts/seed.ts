@@ -1,6 +1,6 @@
 /**
- * Seeds the FAQs, Projects, Researchers, Bootcamps and Gallery collections, and
- * the Contact Details global, with the content that used to be hard-coded in
+ * Seeds the Page Heroes, FAQs, Projects, Researchers, Bootcamps and Gallery
+ * collections, and the Contact Details global, with the content that used to be hard-coded in
  * the page components, uploading the images each row needs to the media bucket
  * along the way.
  *
@@ -15,6 +15,7 @@ import { fileURLToPath } from 'url';
 
 import { getPayload, type Payload } from 'payload';
 
+import { heroPages, pageHeroDefaults } from '../lib/page-heroes';
 import config from '../payload.config';
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -347,6 +348,27 @@ const seed = async () => {
       await payload.create({ collection: 'gallery', data: { ...item, image } });
     }
     payload.logger.info(`gallery: seeded ${gallery.length} row(s).`);
+  }
+
+  const existingHeroes = await payload.count({ collection: 'page-heroes' });
+  if (existingHeroes.totalDocs > 0) {
+    payload.logger.info(
+      `page-heroes: ${existingHeroes.totalDocs} row(s) already present — skipping.`,
+    );
+  } else {
+    for (const page of heroPages) {
+      const { title, description, imageFile } = pageHeroDefaults[page];
+      // The backdrop is decorative, so the alt text only needs to say what it is.
+      // The Gallery hero has no file and keeps following its first photograph.
+      const backgroundImage = imageFile
+        ? await uploadOnce(payload, uploads, imageFile, 'Research laboratory')
+        : undefined;
+      await payload.create({
+        collection: 'page-heroes',
+        data: { page, title, description, backgroundImage },
+      });
+    }
+    payload.logger.info(`page-heroes: seeded ${heroPages.length} row(s).`);
   }
 
   // Globals always exist, so there is no count to guard on: a global that has

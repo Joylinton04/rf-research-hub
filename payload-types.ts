@@ -68,6 +68,7 @@ export interface Config {
   blocks: {};
   collections: {
     users: User;
+    'page-heroes': PageHero;
     faqs: Faq;
     projects: Project;
     researchers: Researcher;
@@ -83,6 +84,7 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
+    'page-heroes': PageHeroesSelect<false> | PageHeroesSelect<true>;
     faqs: FaqsSelect<false> | FaqsSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     researchers: ResearchersSelect<false> | ResearchersSelect<true>;
@@ -161,6 +163,88 @@ export interface User {
     | null;
   password?: string | null;
   collection: 'users';
+}
+/**
+ * Headline, intro paragraph and backdrop photo for the banner at the top of each inner page. One row per page.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "page-heroes".
+ */
+export interface PageHero {
+  id: number;
+  /**
+   * Which page this banner belongs to. Each page can have only one.
+   */
+  page: 'about' | 'projects' | 'bootcamps' | 'gallery' | 'links' | 'contact';
+  /**
+   * The page’s main headline. Keep it short — it renders at 54px on desktop.
+   */
+  title: string;
+  /**
+   * Intro paragraph beneath the headline. Line breaks are preserved exactly as typed.
+   */
+  description: string;
+  /**
+   * Backdrop photo on the right of the banner, faded into black on the left so the text stays legible. Optional — left blank, the page keeps its built-in photo (the Gallery page uses its first photograph).
+   */
+  backgroundImage?: (number | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Images used across the site. Upload once here, then pick the file from a Researcher or Project.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: number;
+  /**
+   * Describes the image for screen readers and for when it fails to load. For a portrait, the person’s name is the right answer.
+   */
+  alt: string;
+  /**
+   * Optional photographer or source attribution.
+   */
+  credit?: string | null;
+  _objectKey?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+  sizes?: {
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    card?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    feature?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
 }
 /**
  * Questions shown in the FAQs accordion on the home page. Drag rows to reorder them.
@@ -242,61 +326,6 @@ export interface Project {
   featured?: boolean | null;
   updatedAt: string;
   createdAt: string;
-}
-/**
- * Images used across the site. Upload once here, then pick the file from a Researcher or Project.
- *
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
- */
-export interface Media {
-  id: number;
-  /**
-   * Describes the image for screen readers and for when it fails to load. For a portrait, the person’s name is the right answer.
-   */
-  alt: string;
-  /**
-   * Optional photographer or source attribution.
-   */
-  credit?: string | null;
-  _objectKey?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
-  sizes?: {
-    thumbnail?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    card?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    feature?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-  };
 }
 /**
  * Faculty and researchers shown in the team grid on the About page. Drag rows to reorder them.
@@ -406,7 +435,7 @@ export interface Bootcamp {
   createdAt: string;
 }
 /**
- * Photographs on the Gallery page. Drag rows to reorder them — the top row is also the hero backdrop.
+ * Photographs on the Gallery page. Drag rows to reorder them — the top row is also the hero backdrop unless Page Heroes sets one.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "gallery".
@@ -489,6 +518,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: number | User;
+      } | null)
+    | ({
+        relationTo: 'page-heroes';
+        value: number | PageHero;
       } | null)
     | ({
         relationTo: 'faqs';
@@ -583,6 +616,18 @@ export interface UsersSelect<T extends boolean = true> {
         createdAt?: T;
         expiresAt?: T;
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "page-heroes_select".
+ */
+export interface PageHeroesSelect<T extends boolean = true> {
+  page?: T;
+  title?: T;
+  description?: T;
+  backgroundImage?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -13,6 +13,7 @@ import { ContactMessages } from './collections/ContactMessages';
 import { Faqs } from './collections/Faqs';
 import { Gallery } from './collections/Gallery';
 import { Media } from './collections/Media';
+import { PageHeroes } from './collections/PageHeroes';
 import { Projects } from './collections/Projects';
 import { Researchers } from './collections/Researchers';
 import { Users } from './collections/Users';
@@ -29,7 +30,17 @@ export default buildConfig({
       titleSuffix: '— ARGG Admin',
     },
   },
-  collections: [Users, Faqs, Projects, Researchers, Bootcamps, Gallery, ContactMessages, Media],
+  collections: [
+    Users,
+    PageHeroes,
+    Faqs,
+    Projects,
+    Researchers,
+    Bootcamps,
+    Gallery,
+    ContactMessages,
+    Media,
+  ],
   globals: [HomeHero, ContactDetails],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

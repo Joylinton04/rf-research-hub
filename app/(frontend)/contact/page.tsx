@@ -1,12 +1,12 @@
 import React from 'react';
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import { getPayload } from 'payload';
 import config from '@payload-config';
 import { Globe, Mail, MapPin, Phone } from 'lucide-react';
 
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { PageHero } from '@/components/PageHero';
 import { ContactForm } from '@/components/ContactForm';
 import { pageMetadata } from '@/lib/site';
 
@@ -50,38 +50,7 @@ export default async function ContactPage() {
       <Navbar overlay />
 
       <main className="flex-grow">
-        {/* Hero Banner — same dark-photo treatment as the other inner pages. */}
-        <section className="relative flex min-h-[430px] items-center overflow-hidden bg-black pt-20 text-white lg:min-h-[490px]">
-          <div className="absolute inset-0 z-0 flex justify-end">
-            <div className="relative h-full w-full lg:w-3/5">
-              {/* `fill` rather than width/height: the backdrop is sized by its
-                  container, not by the file. */}
-              <Image
-                src="/rf-lab2.jpg"
-                alt=""
-                aria-hidden="true"
-                fill
-                sizes="(min-width: 1024px) 60vw, 100vw"
-                priority
-                className="object-cover object-center brightness-90 contrast-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-black via-black/55 to-transparent lg:via-black/30"></div>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20"></div>
-            </div>
-          </div>
-
-          <div className="relative z-10 mx-auto w-full max-w-container-max px-6 py-12 lg:px-12">
-            <div className="max-w-2xl">
-              <h1 className="mb-5 font-sans text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl lg:text-[54px]">
-                Contact Us
-              </h1>
-              <p className="text-base font-medium leading-relaxed text-slate-300 sm:text-xl">
-                Questions about the group, the lab, a bootcamp or a possible
-                collaboration — this reaches us directly.
-              </p>
-            </div>
-          </div>
-        </section>
+        <PageHero page="contact" />
 
         <section className="border-b border-outline-variant bg-surface-container-low px-6 py-16 lg:px-12">
           <div className="mx-auto grid max-w-container-max grid-cols-1 items-start gap-8 lg:grid-cols-12 lg:gap-10">
