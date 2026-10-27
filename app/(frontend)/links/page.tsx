@@ -1,9 +1,9 @@
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { ExternalLink, Radio, ArrowRight, Info, Globe } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { PageHero } from '@/components/PageHero';
 import type { Metadata } from 'next';
 import { pageMetadata } from '@/lib/site';
 
@@ -93,39 +93,7 @@ export default function LinksPage() {
       <Navbar overlay />
 
       <main className="min-h-screen bg-surface flex flex-col">
-        {/* Hero Banner with Dark Ambient Lab Background */}
-        <section className="relative bg-black text-white overflow-hidden min-h-[440px] lg:min-h-[500px] pt-20 flex items-center">
-          {/* Background photo positioned on right and faded seamlessly into black */}
-          <div className="absolute inset-0 z-0 flex justify-end">
-            <div className="relative w-full lg:w-3/5 h-full">
-              {/* `fill` rather than width/height: the backdrop is sized by
-                  its container, not by the file. */}
-              <Image
-                src="/gallery-1.jpeg"
-                alt="ARGG Links and Research Media"
-                fill
-                sizes="(min-width: 1024px) 60vw, 100vw"
-                priority
-                className="object-cover object-center brightness-90 contrast-105"
-              />
-              {/* Multi-layer gradient overlays for smooth dark blending */}
-              <div className="absolute inset-0 bg-gradient-to-r from-black via-black/55 lg:via-black/30 to-transparent"></div>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20"></div>
-            </div>
-          </div>
-
-          {/* Hero Content */}
-          <div className="relative z-10 max-w-container-max mx-auto px-6 lg:px-12 py-16 w-full">
-            <div className="max-w-2xl">
-              <h1 className="text-4xl sm:text-5xl lg:text-[54px] font-extrabold tracking-tight text-white mb-5 leading-tight font-sans">
-                Official Links & Research Media
-              </h1>
-              <p className="text-base sm:text-xl text-slate-300 leading-relaxed font-medium">
-                Connect directly with our lab initiatives, official university research groups, real-time broadcasts, and affiliated social channels.
-              </p>
-            </div>
-          </div>
-        </section>
+        <PageHero page="links" />
 
         {/* Content Container */}
         <div className="flex-grow max-w-container-max w-full mx-auto px-6 lg:px-12 py-12">

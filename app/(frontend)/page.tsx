@@ -174,7 +174,7 @@ export default async function Home() {
       <main className="flex-grow">
 
         {/* Hero Section */}
-        <section className="relative hero-pattern py-16 lg:py-24 px-6 lg:px-12 overflow-hidden border-b border-outline-variant min-h-[calc(100vh-100px)] flex items-center">
+        <section className="relative hero-pattern py-16 lg:py-24 px-6 lg:px-12 overflow-hidden border-b border-outline-variant min-h-[calc(100vh-100px)] min-[1441px]:min-h-[50vh] min-[1441px]:py-12 flex items-center">
           <div className="w-full max-w-container-max mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             <div className="lg:col-span-6 space-y-6 z-10">
               <div className="inline-block rounded-full border border-secondary bg-secondary-container px-4 py-1 text-label-caps font-semibold text-on-secondary-container">
