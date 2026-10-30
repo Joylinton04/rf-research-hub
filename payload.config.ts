@@ -2,6 +2,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import { postgresAdapter } from '@payloadcms/db-postgres';
+import { resendAdapter } from '@payloadcms/email-resend';
 import { lexicalEditor } from '@payloadcms/richtext-lexical';
 import { s3Storage } from '@payloadcms/storage-s3';
 import { buildConfig } from 'payload';
@@ -12,6 +13,7 @@ import { ContactMessages } from './collections/ContactMessages';
 import { Faqs } from './collections/Faqs';
 import { Gallery } from './collections/Gallery';
 import { Media } from './collections/Media';
+import { PageHeroes } from './collections/PageHeroes';
 import { Projects } from './collections/Projects';
 import { Researchers } from './collections/Researchers';
 import { Users } from './collections/Users';
@@ -28,7 +30,17 @@ export default buildConfig({
       titleSuffix: '— ARGG Admin',
     },
   },
-  collections: [Users, Faqs, Projects, Researchers, Bootcamps, Gallery, ContactMessages, Media],
+  collections: [
+    Users,
+    PageHeroes,
+    Faqs,
+    Projects,
+    Researchers,
+    Bootcamps,
+    Gallery,
+    ContactMessages,
+    Media,
+  ],
   globals: [HomeHero, ContactDetails],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
@@ -78,5 +90,19 @@ export default buildConfig({
       // S3-compatible stores reject an x-amz-acl header outright.
     }),
   ],
+  // Only wired up when a key is present. Without one Payload falls back to
+  // logging each email to the console, which keeps local dev working with no
+  // Resend account. The from address must be on a domain verified in Resend;
+  // onboarding@resend.dev works for testing but only delivers to the address
+  // that owns the Resend account.
+  ...(process.env.RESEND_API_KEY
+    ? {
+        email: resendAdapter({
+          apiKey: process.env.RESEND_API_KEY,
+          defaultFromAddress: process.env.EMAIL_FROM_ADDRESS || 'onboarding@resend.dev',
+          defaultFromName: 'ARGG Website',
+        }),
+      }
+    : {}),
   sharp,
 });

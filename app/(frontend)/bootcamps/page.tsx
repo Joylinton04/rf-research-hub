@@ -6,14 +6,17 @@ import config from '@payload-config';
 import { RichText } from '@payloadcms/richtext-lexical/react';
 import { Banknote, Clock, MapPin } from 'lucide-react';
 import { Footer } from '@/components/Footer';
+import { PageHero } from '@/components/PageHero';
 import { Navbar } from '@/components/Navbar';
 import { imageAlt, imageSrc } from '@/lib/media';
+import { pageMetadata } from '@/lib/site';
 
-export const metadata: Metadata = {
-  title: 'Bootcamps — ARGG',
+export const metadata: Metadata = pageMetadata({
+  title: 'Bootcamps',
   description:
     'Intensive short courses from the Antenna Research Group on measurement tools, antenna principles and practical RF/microwave engineering.',
-};
+  path: '/bootcamps',
+});
 
 export default async function BootcampsPage() {
   // Editable in the admin panel at /admin → Collections → Bootcamps. The
@@ -31,44 +34,10 @@ export default async function BootcampsPage() {
 
   return (
     <>
-      <Navbar />
+      <Navbar overlay />
 
       <main className="flex-grow">
-        <section className="relative flex min-h-[350px] items-center overflow-hidden bg-black text-white lg:min-h-[410px]">
-          <div className="absolute inset-0 z-0 flex justify-end">
-            <div className="relative h-full w-full lg:w-3/5">
-              {/* `fill` rather than width/height: the backdrop is sized by its
-                  container, not by the file. */}
-              <Image
-                src="/rf-lab.jpg"
-                alt=""
-                aria-hidden="true"
-                fill
-                sizes="(min-width: 1024px) 60vw, 100vw"
-                priority
-                className="object-cover object-center brightness-90 contrast-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-black via-black/55 to-transparent lg:via-black/30"></div>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20"></div>
-            </div>
-          </div>
-
-          <div className="relative z-10 mx-auto w-full max-w-container-max px-6 py-12 lg:px-12">
-            <div className="max-w-2xl">
-              <h1 className="mb-5 font-sans text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl lg:text-[54px]">
-                BootCamps
-              </h1>
-              <p className="text-base font-medium leading-relaxed text-slate-300 sm:text-xl">
-                Upcoming and past bootcamps — intensive short courses on
-                measurement tools, antenna principles and practical RF/microwave
-                engineering.
-                <br />
-                For information about new sessions, please follow the group&apos;s
-                social channels
-              </p>
-            </div>
-          </div>
-        </section>
+        <PageHero page="bootcamps" />
 
         <section className="border-outline-variant bg-surface-container-low px-6 py-16 lg:px-12 lg:py-24">
           <div className="mx-auto max-w-container-max space-y-16 lg:space-y-24">

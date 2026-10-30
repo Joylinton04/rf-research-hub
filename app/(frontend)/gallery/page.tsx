@@ -1,18 +1,20 @@
 import React from 'react';
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import { getPayload } from 'payload';
 import config from '@payload-config';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { PageHero } from '@/components/PageHero';
 import { GalleryGrid, type GalleryImage } from '@/components/GalleryGrid';
 import { imageAlt, imageSrc } from '@/lib/media';
+import { pageMetadata } from '@/lib/site';
 
-export const metadata: Metadata = {
-  title: 'Gallery — ARGG',
+export const metadata: Metadata = pageMetadata({
+  title: 'Gallery',
   description:
     'Photographs from the R&S RF & Microwave Research Center at KNUST: antenna design sessions, VNA measurement work and the instrument benches the group builds on.',
-};
+  path: '/gallery',
+});
 
 export default async function GalleryPage() {
   // Editable in the admin panel at /admin → Collections → Gallery. The
@@ -55,50 +57,15 @@ export default async function GalleryPage() {
     ];
   });
 
-  // The hero backdrop is the first photograph in the editor's order, so the
-  // page needs no second place to manage it and no file left behind in /public.
-  const hero = images[0] ?? null;
-
   return (
     <>
-      <Navbar />
+      <Navbar overlay />
 
       <main className="flex-grow">
-        {/* Hero Banner — same dark-photo treatment as /about and /projects. */}
-        <section className="relative flex min-h-[350px] items-center overflow-hidden bg-black text-white lg:min-h-[410px]">
-          <div className="absolute inset-0 z-0 flex justify-end">
-            <div className="relative h-full w-full lg:w-3/5">
-              {hero && (
-                /* `fill` rather than width/height: the backdrop is sized by its
-                   container, not by the file. */
-                <Image
-                  src={hero.fullSrc}
-                  alt=""
-                  aria-hidden="true"
-                  fill
-                  sizes="(min-width: 1024px) 60vw, 100vw"
-                  priority
-                  className="object-cover object-center brightness-90 contrast-105"
-                />
-              )}
-              <div className="absolute inset-0 bg-gradient-to-r from-black via-black/55 to-transparent lg:via-black/30"></div>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20"></div>
-            </div>
-          </div>
-
-          <div className="relative z-10 mx-auto w-full max-w-container-max px-6 py-12 lg:px-12">
-            <div className="max-w-2xl">
-              <h1 className="mb-5 font-sans text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl lg:text-[54px]">
-                Gallery
-              </h1>
-              <p className="text-base sm:text-xl text-slate-300 leading-relaxed font-medium">
-                Inside the R&amp;S RF &amp; Microwave Research Center — the antenna
-                design sessions, measurement work and instrument benches behind
-                the group&apos;s research.
-              </p>
-            </div>
-          </div>
-        </section>
+        {/* Unless the editor picks a backdrop for this hero, it is the first
+            photograph in the grid's order, so the page needs no file of its
+            own in /public. */}
+        <PageHero page="gallery" fallbackImage={images[0]?.fullSrc} />
 
         <section className="border-b border-outline-variant bg-surface-container-low px-6 py-16 lg:px-12 lg:py-24">
           <div className="mx-auto max-w-container-max">

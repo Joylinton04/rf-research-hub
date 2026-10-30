@@ -6,10 +6,10 @@ const revalidateGallery = () => {
   safeRevalidatePath('/');
 };
 
-// Photographs shown in the masonry grid on /gallery. The first row also
-// supplies the page's hero backdrop, so `orderable: true` is doing double duty:
-// it gives the admin list a drag handle and a hidden `_order` column that both
-// the grid order and the hero image follow.
+// Photographs shown in the masonry grid on /gallery. `orderable: true` gives
+// the admin list a drag handle and a hidden `_order` column that the grid
+// follows. Unless the Gallery row in Page Heroes picks its own backdrop, the
+// first row here is also the page's hero image.
 //
 // The same rows also fill the Research Media Gallery on the home page, where
 // `category` doubles as the filter chip.
@@ -24,7 +24,7 @@ export const Gallery: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'category', 'date', 'updatedAt'],
     description:
-      'Photographs on the Gallery page. Drag rows to reorder them — the top row is also the hero backdrop.',
+      'Photographs on the Gallery page. Drag rows to reorder them — the top row is also the hero backdrop unless Page Heroes sets one.',
   },
   access: {
     // Published copy is public; only signed-in admins can change it.

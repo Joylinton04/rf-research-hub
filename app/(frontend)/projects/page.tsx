@@ -3,11 +3,13 @@ import { getPayload } from 'payload';
 import config from '@payload-config';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { PageHero } from '@/components/PageHero';
 import { ProjectExplorer, type ProjectSummary } from '@/components/ProjectExplorer';
 import { lexicalToParagraphs } from '@/lib/lexical';
 import { slugify } from '@/lib/slug';
 import { imageSrc } from '@/lib/media';
-import Image from 'next/image';
+import { pageMetadata } from '@/lib/site';
+import type { Metadata } from 'next';
 
 // Dates are stored as midnight UTC. Formatting in the server's local zone would
 // roll "2026-08-01" back into July west of Greenwich, so pin the zone.
@@ -22,6 +24,14 @@ const splitAuthors = (authors: string): string[] =>
     .split(',')
     .map((author) => author.trim())
     .filter(Boolean);
+
+export const metadata: Metadata = pageMetadata({
+  title: 'Projects',
+  description:
+    'Research projects and publications from the Antenna Research Group at KNUST, searchable by year and author.',
+  path: '/projects',
+});
+
 
 export default async function ProjectsPage() {
   // Editable in the admin panel at /admin → Collections → Projects.
@@ -68,43 +78,13 @@ export default async function ProjectsPage() {
 
   return (
     <>
-      <Navbar />
+      <Navbar overlay />
 
-      {/* Hero Banner with Dark Ambient Lab Background */}
-      <section className="relative bg-black text-white overflow-hidden min-h-[360px] lg:min-h-[420px] flex items-center">
-        {/* Background lab photo positioned on right and faded seamlessly into black */}
-        <div className="absolute inset-0 z-0 flex justify-end">
-          <div className="relative w-full lg:w-3/5 h-full">
-            {/* `fill` rather than width/height: the backdrop is sized by its
-                container, not by the file. */}
-            <Image
-              src="/rf-lab2.jpg"
-              alt="Research Laboratory"
-              fill
-              sizes="(min-width: 1024px) 60vw, 100vw"
-              priority
-              className="object-cover object-center brightness-90 contrast-105"
-            />
-            {/* Multi-layer gradient overlays for smooth dark blending */}
-            <div className="absolute inset-0 bg-gradient-to-r from-black via-black/55 lg:via-black/30 to-transparent"></div>
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20"></div>
-          </div>
-        </div>
-
-        {/* Hero Content */}
-        <div className="relative z-10 max-w-container-max mx-auto px-6 lg:px-12 py-16 w-full">
-          <div className="max-w-2xl">
-            <h1 className="text-4xl sm:text-5xl lg:text-[54px] font-extrabold tracking-tight text-white mb-5 leading-tight font-sans">
-              Project Publications
-            </h1>
-            <p className="text-base sm:text-2xl text-slate-300 leading-relaxed font-medium">
-              Explore our projects that contribute to knowledge and innovation across various domains and disciplines.
-            </p>
-          </div>
-        </div>
-      </section>
+      <main className="flex-grow">
+      <PageHero page="projects" />
 
       <ProjectExplorer projects={projects} years={years} authors={authors} />
+      </main>
 
       <Footer />
     </>

@@ -2,7 +2,6 @@ import React from "react";
 import { getPayload } from "payload";
 import config from "@payload-config";
 import Link from "next/link";
-import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -10,6 +9,10 @@ import { ProjectCard } from "@/components/ProjectCard";
 import { MediaGallery, type MediaItem } from "@/components/MediaGallery";
 import { imageAlt, imageSrc } from "@/lib/media";
 import { lexicalToParagraphs } from "@/lib/lexical";
+import { pageMetadata, siteDescription, siteName } from "@/lib/site";
+import { JsonLd } from "@/components/JsonLd";
+import { organizationSchema, websiteSchema } from "@/lib/structured-data";
+import type { Metadata } from "next";
 import {
   Accordion,
   AccordionContent,
@@ -26,10 +29,26 @@ const monthYear = new Intl.DateTimeFormat("en-US", {
   timeZone: "UTC",
 });
 
+// The home page keeps the site name as its own title rather than taking the
+// "%s — ARGG" template, which would read "ARGG — ARGG".
+export const metadata: Metadata = {
+  ...pageMetadata({
+    title: siteName,
+    description: siteDescription,
+    path: "/",
+  }),
+  title: siteName,
+};
+
+
 export default async function Home() {
   // Editable in the admin panel at /admin → Globals → Home Hero.
   const payload = await getPayload({ config });
   const hero = await payload.findGlobal({ slug: "home-hero" });
+
+  // Feeds the Organization block below. Same global the Contact page renders,
+  // so the structured data and the visible contact details stay in step.
+  const contactDetails = await payload.findGlobal({ slug: "contact-details" });
 
   // Editable in the admin panel at /admin → Collections → FAQs. The collection
   // is `orderable`, so `_order` is the editor-controlled running order.
@@ -145,14 +164,19 @@ export default async function Home() {
 
   return (
     <>
+      {/* Identity of the site and the group behind it. Rendered once, here on
+          the home page, and referenced by @id from the other pages' blocks. */}
+      <JsonLd data={organizationSchema(contactDetails)} />
+      <JsonLd data={websiteSchema()} />
+
       <Navbar />
 
       <main className="flex-grow">
 
         {/* Hero Section */}
-        <section className="relative hero-pattern py-16 lg:py-24 px-6 lg:px-12 overflow-hidden border-b border-outline-variant">
-          <div className="max-w-container-max mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center min-h-[550px]">
-            <div className="lg:col-span-7 space-y-6 z-10">
+        <section className="relative hero-pattern py-16 lg:py-24 px-6 lg:px-12 overflow-hidden border-b border-outline-variant min-h-[calc(100vh-100px)] min-[1441px]:min-h-[50vh] min-[1441px]:py-12 flex items-center">
+          <div className="w-full max-w-container-max mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div className="lg:col-span-6 space-y-6 z-10">
               <div className="inline-block rounded-full border border-secondary bg-secondary-container px-4 py-1 text-label-caps font-semibold text-on-secondary-container">
                 Antenna &amp; RF Research &middot; KNUST
               </div>
@@ -166,7 +190,7 @@ export default async function Home() {
               </p>
               <div className="flex flex-wrap gap-4 pt-4">
                 <Link
-                  href="/about"
+                  href="/projects"
                   className="bg-primary text-on-primary px-8 py-3.5 font-label-caps text-label-caps rounded-sm flex items-center gap-2 group hover:bg-opacity-95 transition-all"
                 >
                   Explore Projects
@@ -180,31 +204,20 @@ export default async function Home() {
                 </Link>
               </div>
             </div>
-            {/* hero Image */}
-            <div className="lg:col-span-5 relative hidden lg:block h-full">
-              <div className="aspect-square bg-primary-container rounded-lg overflow-hidden border border-outline shadow-2xl transform rotate-1 relative">
-                {/* `fill` rather than width/height: the tile is sized by its
-                    square container, not by the file. */}
-                <Image
-                  className="object-cover mix-blend-overlay"
-                  src="https://cellbusters.com/wp-content/uploads/2023/10/The-RF-Technology-Revolution-scaled.jpg"
-                  alt="A high-tech printed circuit board designed for telecommunications"
-                  fill
-                  sizes="(min-width: 1024px) 40vw, 0px"
-                  priority
+            {/* hero Video */}
+            <div className="lg:col-span-6 relative">
+              <div className="aspect-video bg-primary-container rounded-lg overflow-hidden">
+                {/* youtube-nocookie keeps YouTube from setting tracking cookies
+                    until the visitor actually presses play. */}
+                <iframe
+                  className="w-full h-full"
+                  src="https://www.youtube-nocookie.com/embed/8ne8dcFD0Bw"
+                  title="ARGG — Antenna Research Group Ghana"
+                  allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                  loading="lazy"
                 />
-                <div className="absolute inset-0 bg-gradient-to-tr from-primary via-transparent to-primary/20"></div>
-                <div className="absolute bottom-6 left-6 bg-surface/95 backdrop-blur-sm p-4 border border-outline-variant rounded-sm shadow-md animate-bounce-slow">
-                  <div className="font-label-caps text-[10px] text-primary mb-1 uppercase tracking-widest font-bold">
-                    Live Spectrum Analysis
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-secondary animate-pulse block"></span>
-                    <span className="font-code-md text-code-md text-primary font-semibold">
-                      28.5 GHz Signal Lock
-                    </span>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
