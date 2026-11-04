@@ -6,6 +6,7 @@ import { getPayload } from 'payload';
 import config from '@payload-config';
 import { RichText } from '@payloadcms/richtext-lexical/react';
 import { ArrowLeft, Calendar, User } from 'lucide-react';
+import { RevealGroup, RevealItem } from '@/components/Reveal';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { lexicalToParagraphs } from '@/lib/lexical';
@@ -107,30 +108,36 @@ export default async function ProjectPage({
       <main className="flex-grow">
         {/* Header */}
         <section className="bg-black text-white px-6 lg:px-12 pt-34 pb-14 lg:pt-40 lg:pb-20">
-          <div className="max-w-container-max mx-auto">
-            <Link
-              href="/projects"
-              className="inline-flex items-center gap-2 font-label-caps text-label-caps text-slate-300 hover:text-white transition-colors mb-8"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              All Projects
-            </Link>
-            <h1 className="text-3xl sm:text-4xl lg:text-[44px] font-extrabold tracking-tight leading-tight font-sans max-w-4xl">
-              {project.title}
-            </h1>
-            <div className="mt-6 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 text-slate-300">
-              <div className="flex items-start gap-2">
-                <User className="w-4 h-4 shrink-0 mt-0.5" />
-                <p className="text-sm font-medium leading-relaxed">{project.authors}</p>
+          <RevealGroup className="max-w-container-max mx-auto">
+            <RevealItem>
+              <Link
+                href="/projects"
+                className="inline-flex items-center gap-2 font-label-caps text-label-caps text-slate-300 hover:text-white transition-colors mb-8"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                All Projects
+              </Link>
+            </RevealItem>
+            <RevealItem>
+              <h1 className="text-3xl sm:text-4xl lg:text-[44px] font-extrabold tracking-tight leading-tight font-sans max-w-4xl">
+                {project.title}
+              </h1>
+            </RevealItem>
+            <RevealItem>
+              <div className="mt-6 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 text-slate-300">
+                <div className="flex items-start gap-2">
+                  <User className="w-4 h-4 shrink-0 mt-0.5" />
+                  <p className="text-sm font-medium leading-relaxed">{project.authors}</p>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <Calendar className="w-4 h-4" />
+                  <span className="font-code-md text-code-md">
+                    {fullDate.format(new Date(project.date))}
+                  </span>
+                </div>
               </div>
-              <div className="flex items-center gap-2 shrink-0">
-                <Calendar className="w-4 h-4" />
-                <span className="font-code-md text-code-md">
-                  {fullDate.format(new Date(project.date))}
-                </span>
-              </div>
-            </div>
-          </div>
+            </RevealItem>
+          </RevealGroup>
         </section>
 
         {/* Body */}

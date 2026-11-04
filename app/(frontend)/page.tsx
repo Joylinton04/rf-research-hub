@@ -7,6 +7,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ProjectCard } from "@/components/ProjectCard";
 import { MediaGallery, type MediaItem } from "@/components/MediaGallery";
+import { RevealGroup, RevealItem } from "@/components/Reveal";
 import { imageAlt, imageSrc } from "@/lib/media";
 import { lexicalToParagraphs } from "@/lib/lexical";
 import { pageMetadata, siteDescription, siteName } from "@/lib/site";
@@ -176,19 +177,26 @@ export default async function Home() {
         {/* Hero Section */}
         <section className="relative hero-pattern py-16 lg:py-24 px-6 lg:px-12 overflow-hidden border-b border-outline-variant min-h-[calc(100vh-100px)] min-[1441px]:min-h-[50vh] min-[1441px]:py-12 flex items-center">
           <div className="w-full max-w-container-max mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            <div className="lg:col-span-6 space-y-6 z-10">
-              <div className="inline-block rounded-full border border-secondary bg-secondary-container px-4 py-1 text-label-caps font-semibold text-on-secondary-container">
-                Antenna &amp; RF Research &middot; KNUST
-              </div>
+            {/* Page-load entrance: the copy staggers in line by line. */}
+            <RevealGroup className="lg:col-span-6 space-y-6 z-10">
+              <RevealItem>
+                <div className="inline-block rounded-full border border-secondary bg-secondary-container px-4 py-1 text-label-caps font-semibold text-on-secondary-container">
+                  Antenna &amp; RF Research &middot; KNUST
+                </div>
+              </RevealItem>
               {/* hero Title */}
-              <h1 className="font-headline-xl sm:text-headline-xl text-headline-lg text-primary leading-tight">
-                {hero.title}
-              </h1>
+              <RevealItem>
+                <h1 className="font-headline-xl sm:text-headline-xl text-headline-lg text-primary leading-tight">
+                  {hero.title}
+                </h1>
+              </RevealItem>
               {/* hero description */}
-              <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl whitespace-pre-line">
-                {hero.description}
-              </p>
-              <div className="flex flex-wrap gap-4 pt-4">
+              <RevealItem>
+                <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl whitespace-pre-line">
+                  {hero.description}
+                </p>
+              </RevealItem>
+              <RevealItem className="flex flex-wrap gap-4 pt-4">
                 <Link
                   href="/projects"
                   className="bg-primary text-on-primary px-8 py-3.5 font-label-caps text-label-caps rounded-sm flex items-center gap-2 group hover:bg-opacity-95 transition-all"
@@ -202,8 +210,8 @@ export default async function Home() {
                 >
                   About RF Research Group
                 </Link>
-              </div>
-            </div>
+              </RevealItem>
+            </RevealGroup>
             {/* hero Video */}
             <div className="lg:col-span-6 relative">
               <div className="aspect-video bg-primary-container rounded-lg overflow-hidden">
@@ -225,31 +233,37 @@ export default async function Home() {
 
 
 
-        {/* Section 2: FAQs */}
+        {/* FAQs: heading held to the left while the questions run down the
+            right, so a long list never pushes the heading out of view. */}
         <section className="py-16 lg:py-24 px-6 lg:px-12 bg-surface border-b border-outline-variant">
-          <div className="max-w-container-max mx-auto">
-            <div className="flex flex-col md:flex-row justify-between items-baseline mb-8 border-b border-outline-variant pb-4">
-              <div>
-                <h2 className="font-headline-lg text-headline-lg text-primary">
+          {/* The heading, then each question in turn, the first time the
+              section scrolls into view. It sits below a full-height hero, so
+              an on-load entrance would usually play out of sight. */}
+          <RevealGroup inView className="max-w-container-max mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+            <RevealItem className="lg:col-span-4">
+              <div className="lg:sticky lg:top-28">
+                <h2 className="text-headline-lg-mobile sm:text-headline-lg text-primary">
                   FAQs
                 </h2>
-                <p className="font-body-md text-body-md text-on-surface-variant mt-1">
-                  Frequently asked questions about amateur radio and our group.
+                <p className="mt-2 text-body-md text-on-surface-variant max-w-[28rem]">
+                  About amateur radio, and about joining the group.
                 </p>
               </div>
+            </RevealItem>
+            <div className="lg:col-span-8">
+              <Accordion type="single" collapsible className="w-full border-t border-outline-variant">
+                {faqs.map((faq) => (
+                  <RevealItem key={faq.id}>
+                    <AccordionItem value={`item-${faq.id}`} className="cursor-pointer">
+                      <AccordionTrigger className="cursor-pointer font-medium">{faq.question}</AccordionTrigger>
+                      <AccordionContent>{faq.answer}</AccordionContent>
+                    </AccordionItem>
+                  </RevealItem>
+                ))}
+              </Accordion>
             </div>
-
-            <Accordion type="single" collapsible className="w-full space-y-3">
-              {faqs.map((faq) => (
-                <AccordionItem key={faq.id} value={`item-${faq.id}`}>
-                  <AccordionTrigger>{faq.question}</AccordionTrigger>
-                  <AccordionContent>{faq.answer}</AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </div>
+          </RevealGroup>
         </section>
-
 
         {/* Key Projects Section */}
         <section className="py-16 lg:py-24 px-6 lg:px-12 bg-surface">

@@ -26,7 +26,7 @@ export const Navbar = ({ overlay = false }: NavbarProps) => {
     { name: 'Tutorials', href: '/tutorials' },
     { name: 'Gallery', href: '/gallery' },
   ];
-//  HOME ABOUT PROJECTS BOOTCAMP TUTORIALS LINKS GALLERY
+  //  HOME ABOUT PROJECTS BOOTCAMP TUTORIALS LINKS GALLERY
 
   return (
     // The header itself is transparent; the glass pill floats inside it so the
@@ -38,10 +38,11 @@ export const Navbar = ({ overlay = false }: NavbarProps) => {
           href="/"
           className="flex items-center gap-3 font-bold text-primary tracking-tight font-sans hover:opacity-90 transition-opacity"
         >
-          <Image src="/argg.svg" alt="ARGG Logo" width={44} height={44} priority/>
+          <Image src="/argg.svg" alt="ARGG Logo" width={47} height={52} priority />
           <div className="flex flex-col">
             <span className='text-headline-md block sm:hidden'>ARGG</span>
             <span className='text-headline-sm hidden sm:block'>ARGG</span>
+            <span className="text-[15px] hidden sm:block font-normal -mt-1.5">Amateur Radio Group Ghana</span>
           </div>
         </Link>
 
@@ -55,8 +56,8 @@ export const Navbar = ({ overlay = false }: NavbarProps) => {
                 href={link.href}
                 aria-current={isActive ? 'page' : undefined}
                 className={`font-sans text-label-caps px-3.5 py-2 rounded-full transition-all duration-200 ${isActive
-                    ? 'liquid-glass text-primary font-semibold'
-                    : 'text-on-surface-variant hover:text-primary hover:bg-surface-container-lowest/50'
+                  ? 'liquid-glass text-primary font-semibold'
+                  : 'text-on-surface-variant hover:text-primary hover:bg-surface-container-lowest/50'
                   }`}
               >
                 {link.name}
@@ -109,8 +110,8 @@ export const Navbar = ({ overlay = false }: NavbarProps) => {
                   onClick={() => setIsOpen(false)}
                   aria-current={isActive ? 'page' : undefined}
                   className={`font-label-caps text-label-caps px-4 py-3 rounded-2xl transition-colors ${isActive
-                      ? 'bg-surface-container-lowest/70 text-primary font-bold'
-                      : 'text-on-surface-variant hover:bg-surface-container-lowest/50'
+                    ? 'bg-surface-container-lowest/70 text-primary font-bold'
+                    : 'text-on-surface-variant hover:bg-surface-container-lowest/50'
                     }`}
                 >
                   {link.name}
