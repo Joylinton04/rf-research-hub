@@ -27,7 +27,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   status,
 }) => {
   return (
-    <Link href={href} className="group bg-surface-container-lowest border border-slate-300 rounded-xl p-6 flex flex-col transition-all duration-300">
+    <Link href={href} className="group bg-surface-container-lowest rounded-xl p-6 flex flex-col transition-all duration-300">
       <div className="w-full aspect-video mb-6 overflow-hidden bg-surface-container-low border border-outline-variant relative">
         {/* `fill` rather than width/height: the tile is sized by its 16:9
             container, and an uploaded thumbnail can be any shape. */}

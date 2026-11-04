@@ -4,6 +4,7 @@ import { getPayload } from 'payload';
 import config from '@payload-config';
 import { imageSrc } from '@/lib/media';
 import { pageHeroDefaults, type HeroPage } from '@/lib/page-heroes';
+import { RevealGroup, RevealItem, HeroMedia } from '@/components/Reveal';
 
 interface PageHeroProps {
   page: HeroPage;
@@ -42,7 +43,8 @@ export async function PageHero({ page, fallbackImage }: PageHeroProps) {
     <section className="relative flex min-h-[430px] items-center overflow-hidden bg-black pt-20 text-white lg:min-h-[490px]">
       {/* Background photo positioned on the right and faded seamlessly into black */}
       <div className="absolute inset-0 z-0 flex justify-end">
-        <div className="relative h-full w-full lg:w-3/5">
+        {/* Eases in from a slight zoom; the section's overflow-hidden clips it. */}
+        <HeroMedia className="relative h-full w-full lg:w-3/5">
           {backdrop && (
             /* `fill` rather than width/height: the backdrop is sized by its
                container, not by the file. Decorative, so hidden from
@@ -60,19 +62,23 @@ export async function PageHero({ page, fallbackImage }: PageHeroProps) {
           {/* Multi-layer gradient overlays for smooth dark blending */}
           <div className="absolute inset-0 bg-gradient-to-r from-black via-black/55 to-transparent lg:via-black/30"></div>
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20"></div>
-        </div>
+        </HeroMedia>
       </div>
 
       <div className="relative z-10 mx-auto w-full max-w-container-max px-6 py-12 lg:px-12">
-        <div className="max-w-2xl">
-          <h1 className="mb-5 font-sans text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl lg:text-[54px]">
-            {title}
-          </h1>
+        <RevealGroup className="max-w-2xl">
+          <RevealItem>
+            <h1 className="mb-5 font-sans text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl lg:text-[54px]">
+              {title}
+            </h1>
+          </RevealItem>
           {/* The editor's line breaks are the formatting here. */}
-          <p className="whitespace-pre-line text-base font-medium leading-relaxed text-slate-300 sm:text-xl">
-            {description}
-          </p>
-        </div>
+          <RevealItem>
+            <p className="whitespace-pre-line text-base font-medium leading-relaxed text-slate-300 sm:text-xl">
+              {description}
+            </p>
+          </RevealItem>
+        </RevealGroup>
       </div>
     </section>
   );

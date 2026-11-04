@@ -21,8 +21,8 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   date,
 }) => {
   return (
-    <div className="group relative bg-white border border-outline-variant overflow-hidden hover:shadow-lg hover:border-primary transition-all duration-300">
-      <div className="aspect-[4/5] relative overflow-hidden bg-surface-container">
+    <div className="group relative bg-white overflow-hidden hover:shadow-lg transition-all duration-300">
+      <div className="aspect-[4/5] relative overflow-hidden">
         {/* `fill` rather than width/height: the tile is sized by its 4:5
             container, not by the file. */}
         <Image
@@ -40,7 +40,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
           </div>
         )}
       </div>
-      <div className="p-6 border-t border-outline-variant bg-white">
+      <div className="p-6 bg-white">
         <h3 className="font-label-caps text-label-caps text-secondary font-semibold mb-1">
           {category}
         </h3>
@@ -51,7 +51,6 @@ export const MediaCard: React.FC<MediaCardProps> = ({
           {description}
         </p>
       </div>
-      <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
     </div>
   );
 };
