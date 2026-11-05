@@ -255,8 +255,8 @@ export default async function Home() {
                 {faqs.map((faq) => (
                   <RevealItem key={faq.id}>
                     <AccordionItem value={`item-${faq.id}`} className="cursor-pointer">
-                      <AccordionTrigger className="cursor-pointer font-medium">{faq.question}</AccordionTrigger>
-                      <AccordionContent>{faq.answer}</AccordionContent>
+                      <AccordionTrigger className="cursor-pointer font-medium sm:text-xl">{faq.question}</AccordionTrigger>
+                      <AccordionContent className="text-base">{faq.answer}</AccordionContent>
                     </AccordionItem>
                   </RevealItem>
                 ))}
